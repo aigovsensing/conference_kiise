@@ -1,25 +1,6 @@
 {
-  "updated": "2026-10-04",
+  "updated": "2026-10-11",
   "items": [
-    {
-      "abbr": "WSDM",
-      "edition": "2027",
-      "kind": "논문",
-      "date": "2026-08-06"
-    },
-    {
-      "abbr": "KDD",
-      "edition": "2027",
-      "kind": "논문",
-      "date": "2026-08-08",
-      "note": "1차 라운드"
-    },
-    {
-      "abbr": "PPoPP",
-      "edition": "2027",
-      "kind": "논문",
-      "date": "2026-08-11"
-    },
     {
       "abbr": "MobiCom",
       "edition": "2027",
@@ -981,6 +962,37 @@
       "edition": "2028",
       "kind": "초록",
       "date": "2027-11-06"
+    },
+    {
+      "abbr": "PLDI",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-11-10"
+    },
+    {
+      "abbr": "S&P",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-11-12",
+      "note": "2차 라운드"
+    },
+    {
+      "abbr": "CVPR",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-11-13"
+    },
+    {
+      "abbr": "DAC",
+      "edition": "2028",
+      "kind": "초록",
+      "date": "2027-11-13"
+    },
+    {
+      "abbr": "ISCA",
+      "edition": "2028",
+      "kind": "초록",
+      "date": "2027-11-13"
     }
   ]
 }

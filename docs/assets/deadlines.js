@@ -6,27 +6,8 @@
 // 실제 마감일은 반드시 각 학회 공식 홈페이지에서 확인해야 합니다.
 // abbr 은 docs/assets/data.js 의 약칭과 일치해야 캘린더 칩이 학회 정보와 연결됩니다.
 window.KIISE_DEADLINES = {
-  "updated": "2026-10-04",
+  "updated": "2026-10-11",
   "items": [
-    {
-      "abbr": "WSDM",
-      "edition": "2027",
-      "kind": "논문",
-      "date": "2026-08-06"
-    },
-    {
-      "abbr": "KDD",
-      "edition": "2027",
-      "kind": "논문",
-      "date": "2026-08-08",
-      "note": "1차 라운드"
-    },
-    {
-      "abbr": "PPoPP",
-      "edition": "2027",
-      "kind": "논문",
-      "date": "2026-08-11"
-    },
     {
       "abbr": "MobiCom",
       "edition": "2027",
@@ -988,6 +969,37 @@ window.KIISE_DEADLINES = {
       "edition": "2028",
       "kind": "초록",
       "date": "2027-11-06"
+    },
+    {
+      "abbr": "PLDI",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-11-10"
+    },
+    {
+      "abbr": "S&P",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-11-12",
+      "note": "2차 라운드"
+    },
+    {
+      "abbr": "CVPR",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-11-13"
+    },
+    {
+      "abbr": "DAC",
+      "edition": "2028",
+      "kind": "초록",
+      "date": "2027-11-13"
+    },
+    {
+      "abbr": "ISCA",
+      "edition": "2028",
+      "kind": "초록",
+      "date": "2027-11-13"
     }
   ]
 };
