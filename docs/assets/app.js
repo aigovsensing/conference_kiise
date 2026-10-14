@@ -107,13 +107,13 @@
     if (window.KIISE_DEADLINES) {
       const cur = monthStats()[0];
       tiles.push({ val: T.mcCase(cur.count), lbl: T.tileThisMonth(T.month[cur.month - 1]),
-                   sub: T.tileConfEst(cur.confirmed, cur.estimated), dot: null });
+                   sub: T.tileConfEst(cur.confirmed, cur.estimated), dot: null, hl: true });
     }
     const box = $("#tiles");
     box.innerHTML = "";
     tiles.forEach((t) => {
       const dot = t.dot ? `<span class="dot" style="background:${t.dot}"></span>` : "";
-      box.appendChild(el("div", "tile",
+      box.appendChild(el("div", "tile" + (t.hl ? " hl" : ""),
         `<div class="val">${dot}${t.val}</div><div class="lbl">${t.lbl}</div>` +
         (t.sub ? `<div class="sub">${t.sub}</div>` : "")));
     });
@@ -552,7 +552,7 @@
           btn.style.background = chipColor(it.abbr);
           const rec = byAbbr.get(it.abbr);
           btn.title = T.chipTitle(it.abbr, it.edition, kindL, ds,
-            it.note ? T.note(it.note) : "", rec ? rec.name : "");
+            it.note ? T.note(it.note) : "", rec ? rec.name : "", isConfirmed(it));
           btn.onclick = () => {
             const q = encodeURIComponent(`${rec ? rec.name : it.abbr} ${it.edition} call for papers deadline`)
               .replace(/'/g, "%27").replace(/"/g, "%22");

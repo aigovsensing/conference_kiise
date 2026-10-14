@@ -19,6 +19,8 @@
   --grade-a:      #9ec5f4;
   /* secondary chart hue (month chart: 초록 마감) */
   --chart-2:      #7c5cff;
+  /* highlight: 이번 달 마감 타일 */
+  --orange:       #d9560b;
 
   --radius:       14px;
   --shadow:       0 1px 2px rgba(11,11,11,.05), 0 8px 24px rgba(11,11,11,.05);
@@ -40,6 +42,7 @@
     --grade-s:    #3987e5;
     --grade-a:    #5598e7;
     --chart-2:    #9b83ff;
+    --orange:     #ff8a3d;
   }
 }
 :root[data-theme="dark"] {
@@ -57,6 +60,7 @@
   --grade-s:    #3987e5;
   --grade-a:    #5598e7;
   --chart-2:    #9b83ff;
+  --orange:     #ff8a3d;
 }
 
 * { box-sizing: border-box; }
@@ -119,6 +123,9 @@ h1, h2 { margin: 0; font-weight: 700; letter-spacing: -0.01em; }
 .tile .val { font-size: 2rem; font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; }
 .tile .lbl { color: var(--text-2); font-size: .82rem; margin-top: 4px; }
 .tile .sub { color: var(--muted); font-size: .76rem; margin-top: 2px; }
+.tile.hl { border-color: color-mix(in srgb, var(--orange) 55%, transparent); background: color-mix(in srgb, var(--orange) 7%, var(--surface)); }
+.tile.hl .val, .tile.hl .lbl, .tile.hl .sub { color: var(--orange); }
+.tile.hl .lbl, .tile.hl .sub { font-weight: 600; }
 .tile .dot { display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 6px; vertical-align: middle; }
 
 /* ---------- cards ---------- */

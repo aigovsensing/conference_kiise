@@ -32,8 +32,8 @@ window.KIISE_I18N = {
     kind: (k) => k,
     note: (n) => n,
     deadlineWord: "마감",
-    chipTitle: (abbr, ed, kind, ds, note, name) =>
-      `${abbr} ${ed} ${kind} 마감 (예상): ${ds}` + (note ? ` · ${note}` : "") + (name ? `\n${name}` : ""),
+    chipTitle: (abbr, ed, kind, ds, note, name, confirmed) =>
+      `${abbr} ${ed} ${kind} 마감 (${confirmed ? "확정" : "예상"}): ${ds}` + (note ? ` · ${note}` : "") + (name ? `\n${name}` : ""),
     panelTitle: (abbr, ed, kind) => `${abbr} ${ed} ${kind} 마감`,
     upGrade: (g) => (g === "S" ? "S 최우수" : "A 우수"),
     estBadge: "📅 예상",
@@ -91,8 +91,8 @@ window.KIISE_I18N = {
       "분기 마감": "Quarterly deadline", "가을 라운드": "Fall round",
     }[n] || n),
     deadlineWord: "deadline",
-    chipTitle: (abbr, ed, kind, ds, note, name) =>
-      `${abbr} ${ed} ${kind} deadline (est.): ${ds}` + (note ? ` · ${note}` : "") + (name ? `\n${name}` : ""),
+    chipTitle: (abbr, ed, kind, ds, note, name, confirmed) =>
+      `${abbr} ${ed} ${kind} deadline (${confirmed ? "confirmed" : "est."}): ${ds}` + (note ? ` · ${note}` : "") + (name ? `\n${name}` : ""),
     panelTitle: (abbr, ed, kind) => `${abbr} ${ed} ${kind} deadline`,
     upGrade: (g) => (g === "S" ? "S · Top" : "A · Excellent"),
     estBadge: "📅 Est.",
