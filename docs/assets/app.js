@@ -1036,7 +1036,7 @@
   // their final heights; otherwise content inserted above can shift the target.
   window.setTimeout(() => {
     const id = location.hash.slice(1);
-    const link = document.querySelector(`.section-nav [data-target="${CSS.escape(id)}"]`);
+    const link = document.querySelector(`.section-nav [data-target="${window.CSS.escape(id)}"]`);
     if (link) link.click();
   }, 150);
   initTheme();
