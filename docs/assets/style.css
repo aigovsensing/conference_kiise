@@ -109,7 +109,7 @@ h1, h2 { margin: 0; font-weight: 700; letter-spacing: -0.01em; }
 
 /* ---------- tiles ---------- */
 .tiles {
-  display: grid; grid-template-columns: repeat(5, 1fr);
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 14px; margin: 26px 0;
 }
 .tile {
@@ -118,6 +118,7 @@ h1, h2 { margin: 0; font-weight: 700; letter-spacing: -0.01em; }
 }
 .tile .val { font-size: 2rem; font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; }
 .tile .lbl { color: var(--text-2); font-size: .82rem; margin-top: 4px; }
+.tile .sub { color: var(--muted); font-size: .76rem; margin-top: 2px; }
 .tile .dot { display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 6px; vertical-align: middle; }
 
 /* ---------- cards ---------- */

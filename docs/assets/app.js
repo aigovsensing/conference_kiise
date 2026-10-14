@@ -27,6 +27,8 @@
     return n;
   };
   const count = (arr, fn) => arr.filter(fn).length;
+  // 마감일 항목의 확정 여부: status 가 "confirmed" 일 때만 확정, 그 외(미지정 포함)는 예상치
+  const isConfirmed = (it) => it.status === "confirmed";
 
   // conference identity for year-over-year diff: abbr sans parenthetical qualifier
   const confKey = (r) =>
@@ -101,12 +103,19 @@
       { val: majors.length, lbl: T.tileMajor, dot: null },
       { val: subs.length, lbl: T.tileSub, dot: null },
     ];
+    // 이번 달 마감 건수 (확정/예상 구분) — 마감 데이터가 있을 때만
+    if (window.KIISE_DEADLINES) {
+      const cur = monthStats()[0];
+      tiles.push({ val: T.mcCase(cur.count), lbl: T.tileThisMonth(T.month[cur.month - 1]),
+                   sub: T.tileConfEst(cur.confirmed, cur.estimated), dot: null });
+    }
     const box = $("#tiles");
     box.innerHTML = "";
     tiles.forEach((t) => {
       const dot = t.dot ? `<span class="dot" style="background:${t.dot}"></span>` : "";
       box.appendChild(el("div", "tile",
-        `<div class="val">${dot}${t.val}</div><div class="lbl">${t.lbl}</div>`));
+        `<div class="val">${dot}${t.val}</div><div class="lbl">${t.lbl}</div>` +
+        (t.sub ? `<div class="sub">${t.sub}</div>` : "")));
     });
   }
 
@@ -597,7 +606,7 @@
                 (rec ? `<span class="up-badge">${rec.subName}</span>` +
                        `<span class="pill grade-${rec.grade.toLowerCase()}">${T.upGrade(rec.grade)}</span>` +
                        `<span class="pill ${rec.major.toLowerCase()}">${rec.major}</span>` : "") +
-                `<span class="up-badge est">${T.estBadge}</span>` +
+                (isConfirmed(it) ? "" : `<span class="up-badge est">${T.estBadge}</span>`) +
               `</div>` +
               `<p class="up-kind">${T.kindLine(T.kind(it.kind), it.note ? T.note(it.note) : "")}</p>` +
               (rec ? `<p class="up-name">${rec.name}</p>` : "") +
@@ -935,17 +944,20 @@
 
   function monthStats() {
     const items = (window.KIISE_DEADLINES && window.KIISE_DEADLINES.items) || [];
+    const empty = () => ({ n: 0, paper: 0, abstract: 0, other: 0, confirmed: 0, estimated: 0, confs: new Set() });
     const by = {};
     items.forEach((it) => {
       const k = it.date.slice(0, 7);
-      const m = by[k] || (by[k] = { n: 0, paper: 0, abstract: 0, other: 0, confs: new Set() });
+      const m = by[k] || (by[k] = empty());
       m.n++;
       m[it.kind === "논문" ? "paper" : it.kind === "초록" ? "abstract" : "other"]++;
+      m[isConfirmed(it) ? "confirmed" : "estimated"]++;
       m.confs.add(it.abbr);
     });
     return monthKeys12().map((mk) => {
-      const m = by[mk.key] || { n: 0, paper: 0, abstract: 0, other: 0, confs: new Set() };
-      return { ...mk, count: m.n, paper: m.paper, abstract: m.abstract, other: m.other, confCount: m.confs.size };
+      const m = by[mk.key] || empty();
+      return { ...mk, count: m.n, paper: m.paper, abstract: m.abstract, other: m.other,
+               confirmed: m.confirmed, estimated: m.estimated, confCount: m.confs.size };
     });
   }
 
