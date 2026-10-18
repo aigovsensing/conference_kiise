@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-14",
+  "updated": "2026-10-18",
   "items": [
     {
       "abbr": "USENIX Security",
@@ -1040,6 +1040,12 @@
       "edition": "2028",
       "kind": "논문",
       "date": "2027-11-18"
+    },
+    {
+      "abbr": "ISCA",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-11-20"
     }
   ]
 }
