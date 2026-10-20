@@ -7,7 +7,7 @@
   <meta name="description" content="KIISE 우수 SW 국제학술대회 목록(2014·2016·2018·2020·2024) 대시보드 — S/A 등급, 대분야·소분야별 분포와 검색">
   <title>KIISE 우수 SW 국제학술대회 대시보드</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🎓%3C/text%3E%3C/svg%3E">
-  <link rel="stylesheet" href="assets/style.css?v=20261014b">
+  <link rel="stylesheet" href="assets/style.css?v=20261021">
 </head>
 <body>
   <header class="site-header">
@@ -16,7 +16,7 @@
         <a class="brand-mark" href="https://leemgs.github.io/conference_kiise/" title="대시보드 홈으로" aria-label="대시보드 홈으로">🎓</a>
         <div>
           <h1 id="site-title">KIISE 우수 SW 국제학술대회 대시보드</h1>
-          <p class="tagline">한국정보과학회(KIISE) 선정 · <strong id="tag-year">2024년</strong> 우수 국제학술대회 목록 — <span id="tag-count">216</span>개 학회 <span class="muted">(연도 선택 가능)</span></p>
+          <p class="tagline">한국정보과학회(KIISE) 선정 · <strong id="tag-year">2024년</strong> 우수 국제학술대회 목록 — <span id="tag-count">216</span>개 학회<span id="tag-misc"></span> <span class="muted">(연도 선택 가능)</span></p>
         </div>
       </div>
       <div class="header-actions">
@@ -55,7 +55,7 @@
       <article class="card" id="major-card">
         <div class="card-head">
           <h2 id="h-major-dist">대분야별 등급 분포</h2>
-          <p id="s-major-dist" class="card-sub">AI · CS 두 대분야를 S/A 등급으로 나눈 학회 수</p>
+          <p id="s-major-dist" class="card-sub">AI · CS 두 대분야를 S/A/기타 등급으로 나눈 학회 수</p>
         </div>
         <div id="chart-major" class="chart-major"></div>
         <div class="legend" id="legend-grade"></div>
@@ -64,7 +64,7 @@
       <article class="card" id="grade-card">
         <div class="card-head">
           <h2 id="h-grade-comp">등급 구성</h2>
-          <p id="s-grade-comp" class="card-sub">전체 학회의 S/A 등급 비율</p>
+          <p id="s-grade-comp" class="card-sub">S(최우수) · A(우수) · 기타(KIISE 비지정, 참고용) 비율</p>
         </div>
         <div id="chart-grade" class="chart-donut"></div>
       </article>
@@ -110,7 +110,7 @@
     <section class="card" id="month-card">
       <div class="card-head">
         <h2 id="h-month">월별 학회 현황</h2>
-        <p id="s-month" class="card-sub">향후 12개월간 논문·초록 마감 기준 학회 수 (막대 클릭 시 상세)</p>
+        <p id="s-month" class="card-sub">향후 12개월간 KIISE 지정(S/A) 학회의 논문·초록 마감 건수 (막대 클릭 시 상세)</p>
       </div>
       <div id="month-chart" class="cc"></div>
       <div class="legend" id="legend-month"></div>
@@ -168,13 +168,14 @@
     <section class="card" id="deadline-card">
       <div class="card-head">
         <h2 id="h-deadline">논문 제출 마감 캘린더</h2>
-        <p id="s-deadline" class="card-sub">주요 우수 학회의 초록·논문 마감 일정 — 직전 연도 일정 기반 <strong>예상일</strong>이므로 반드시 공식 홈페이지에서 확인하세요</p>
+        <p id="s-deadline" class="card-sub">KIISE 최우수(S)·우수(A) 학회와 기타(참고용) 학회의 초록·논문 마감 일정 — 직전 연도 일정 기반 <strong>예상일</strong>이므로 반드시 공식 홈페이지에서 확인하세요. 기타 학회는 회색 점선 칩으로 표시됩니다.</p>
       </div>
       <div class="cal-toolbar">
         <button id="cal-prev" class="btn ghost icon" title="이전 달" aria-label="이전 달">‹</button>
         <h3 id="cal-title" class="cal-title" aria-live="polite"></h3>
         <button id="cal-next" class="btn ghost icon" title="다음 달" aria-label="다음 달">›</button>
         <button id="cal-today" class="btn ghost">오늘</button>
+        <div class="filter-group cal-filter" id="cal-filter" role="group" aria-label="학회 분류 필터"></div>
       </div>
       <div class="cal-dow" aria-hidden="true">
         <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
@@ -186,7 +187,7 @@
     <section class="card" id="upcoming-card">
       <div class="card-head">
         <h2 id="h-upcoming">다가오는 마감</h2>
-        <p id="s-upcoming" class="card-sub">오늘 이후 예정된 초록·논문 마감 — 직전 연도 일정 기반 <strong>예상일</strong></p>
+        <p id="s-upcoming" class="card-sub">오늘 이후 예정된 초록·논문 마감 (S · A · 기타) — 직전 연도 일정 기반 <strong>예상일</strong></p>
       </div>
       <ol id="upcoming-list" class="upcoming-list"></ol>
       <div class="upcoming-more-wrap">
@@ -267,7 +268,7 @@
 
   <footer class="site-footer">
     <div class="wrap">
-      <p id="f-src">데이터 출처: 한국정보과학회(KIISE) <a href="https://www.kiise.or.kr/academy/main/getContent.fa?content_no=86&MENU_ID=130500" target="_blank" rel="noopener">우수 국제학술대회 목록 안내</a> · <code>excellent_sw_conferences_{2014,2016,2018,2020,2024}.csv</code></p>
+      <p id="f-src">데이터 출처: 한국정보과학회(KIISE) <a href="https://www.kiise.or.kr/academy/main/getContent.fa?content_no=86&MENU_ID=130500" target="_blank" rel="noopener">우수 국제학술대회 목록 안내</a> · <code>excellent_sw_conferences_{2014,2016,2018,2020,2024}.csv</code> · 기타(참고용): <code>misc_sw_conferences_2024.csv</code></p>
       <p id="f-note" class="muted">본 대시보드는 비공식 참고용입니다. 등급·목록의 최종 기준은 KIISE 공식 자료를 확인하세요. 참고 구현: <a href="https://github.com/leemgs/conference_kiise" target="_blank" rel="noopener">github.com/leemgs/conference_kiise</a></p>
     </div>
   </footer>
@@ -296,12 +297,12 @@
     </div>
   </aside>
 
-  <script src="assets/data.js?v=20260721a"></script>
-  <script src="assets/i18n.js?v=20261014b"></script>
-  <script src="assets/deadlines.js?v=20261018"></script>
+  <script src="assets/data.js?v=20261021"></script>
+  <script src="assets/i18n.js?v=20261021"></script>
+  <script src="assets/deadlines.js?v=20261020"></script>
   <script src="assets/korea.js?v=20260727"></script>
   <script src="assets/publications.js?v=20260821"></script>
   <script src="assets/publication-chart.js?v=20260821b"></script>
-  <script src="assets/app.js?v=20261014b"></script>
+  <script src="assets/app.js?v=20261021"></script>
 </body>
 </html>
