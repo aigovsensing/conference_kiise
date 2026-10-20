@@ -4,7 +4,7 @@
 // 개최지·일정·마감일은 조사 시점 발표 기준이므로,
 // 반드시 각 학회 공식 홈페이지에서 최신 정보를 확인해야 합니다.
 window.KIISE_KOREA = {
-  "updated": "2026-07-27",
+  "updated": "2026-10-01",
   "specialWatch": [
     "ICML",
     "ICLR",
@@ -21,30 +21,6 @@ window.KIISE_KOREA = {
     "INTERSPEECH"
   ],
   "items": [
-    {
-      "abbr": "ICML",
-      "edition": "2026",
-      "year": 2026,
-      "country": "KR",
-      "name": "International Conference on Machine Learning",
-      "city": "서울",
-      "cityEn": "Seoul",
-      "venue": "COEX",
-      "start": "2026-07-06",
-      "end": "2026-07-11",
-      "deadlines": [
-        {
-          "kind": "초록",
-          "date": "2026-01-22"
-        },
-        {
-          "kind": "논문",
-          "date": "2026-01-28"
-        }
-      ],
-      "site": "https://icml.cc/",
-      "confirmed": true
-    },
     {
       "abbr": "KDD",
       "edition": "2026",
@@ -171,6 +147,32 @@ window.KIISE_KOREA = {
       "end": "2028-06-02",
       "deadlines": [],
       "site": "https://2028.ieeeicassp.org/",
+      "confirmed": true
+    }
+  ],
+  "past": [
+    {
+      "abbr": "ICML",
+      "edition": "2026",
+      "year": 2026,
+      "country": "KR",
+      "name": "International Conference on Machine Learning",
+      "city": "서울",
+      "cityEn": "Seoul",
+      "venue": "COEX",
+      "start": "2026-07-06",
+      "end": "2026-07-11",
+      "deadlines": [
+        {
+          "kind": "초록",
+          "date": "2026-01-22"
+        },
+        {
+          "kind": "논문",
+          "date": "2026-01-28"
+        }
+      ],
+      "site": "https://icml.cc/",
       "confirmed": true
     }
   ]

@@ -29,6 +29,8 @@
     return n;
   };
   const count = (arr, fn) => arr.filter(fn).length;
+  // 마감일 항목의 확정 여부: status 가 "confirmed" 일 때만 확정, 그 외(미지정 포함)는 예상치
+  const isConfirmed = (it) => it.status === "confirmed";
 
   // conference identity for year-over-year diff: abbr sans parenthetical qualifier
   const confKey = (r) =>
@@ -106,12 +108,19 @@
       { val: majors.length, lbl: T.tileMajor, dot: null },
       { val: subs.length, lbl: T.tileSub, dot: null },
     ];
+    // 이번 달 마감 건수 (확정/예상 구분) — 마감 데이터가 있을 때만
+    if (window.KIISE_DEADLINES) {
+      const cur = monthStats()[0];
+      tiles.push({ val: T.mcCase(cur.count), lbl: T.tileThisMonth(T.month[cur.month - 1]),
+                   sub: T.tileConfEst(cur.confirmed, cur.estimated), dot: null, hl: true });
+    }
     const box = $("#tiles");
     box.innerHTML = "";
     tiles.forEach((t) => {
       const dot = t.dot ? `<span class="dot" style="background:${t.dot}"></span>` : "";
-      box.appendChild(el("div", "tile",
-        `<div class="val">${dot}${t.val}</div><div class="lbl">${t.lbl}</div>`));
+      box.appendChild(el("div", "tile" + (t.hl ? " hl" : ""),
+        `<div class="val">${dot}${t.val}</div><div class="lbl">${t.lbl}</div>` +
+        (t.sub ? `<div class="sub">${t.sub}</div>` : "")));
     });
   }
 
@@ -474,6 +483,7 @@
       state.year === "ALL"
         ? (years.length > 1 ? T.yearRange(years[0], years[years.length - 1]) : T.yearOpt(years[0]))
         : T.yearOpt(state.year);
+    syncSectionNavs();   // "이전 대비 변동" 버튼은 해당 카드가 있을 때만 노출
   }
 
   /* ---------------- theme toggle ---------------- */
@@ -588,7 +598,7 @@
           if (!misc) btn.style.background = chipColor(it.abbr);
           const rec = recOf(it);
           btn.title = (misc ? T.miscPrefix : "") + T.chipTitle(it.abbr, it.edition, kindL, ds,
-            it.note ? T.note(it.note) : "", rec ? rec.name : "");
+            it.note ? T.note(it.note) : "", rec ? rec.name : "", isConfirmed(it));
           btn.onclick = () => {
             const q = encodeURIComponent(`${rec ? rec.name : it.abbr} ${it.edition} call for papers deadline`)
               .replace(/'/g, "%27").replace(/"/g, "%22");
@@ -644,7 +654,7 @@
                 (rec ? `<span class="up-badge">${rec.subName}</span>` +
                        `<span class="pill grade-${rec.grade.toLowerCase()}">${T.upGrade(rec.grade)}</span>` +
                        `<span class="pill ${rec.major.toLowerCase()}">${rec.major}</span>` : "") +
-                `<span class="up-badge est">${T.estBadge}</span>` +
+                (isConfirmed(it) ? "" : `<span class="up-badge est">${T.estBadge}</span>`) +
               `</div>` +
               `<p class="up-kind">${T.kindLine(T.kind(it.kind), it.note ? T.note(it.note) : "")}</p>` +
               (rec ? `<p class="up-name">${rec.name}</p>` : "") +
@@ -737,6 +747,7 @@
     function renderCountry(country) {
       const cItems = kr.items.filter((it) => countryOf(it) === country);
       const sec = el("section", "kr-country");
+      sec.id = "kr-country-" + country;   // scroll target for the section sub-nav
       sec.appendChild(el("h3", "kr-country-heading",
         `${FLAG[country]} ${T.krCountry(country)} <span class="changes-badge">${cItems.length}</span>`));
       if (!cItems.length) {
@@ -773,24 +784,116 @@
       T.krUpdated(fmtDot(kr.updated || ""))));
   }
 
+  /* ---------------- in-view quick-jump sub-navigation ---------------- */
+  // Every view (대시보드 / 개최지별 / 달력 / 목록) opens with a row of menu buttons
+  // pinned to the top. Clicking one jumps straight to that section so the reader
+  // never has to scroll the page down to find it. Each link has a stable hash URL
+  // and a data-target pointing at the id of the section it reveals.
+  const sectionNavs = [];   // {syncVisibility} handles, refreshed by syncSectionNavs()
+
+  function initSectionNav(nav) {
+    const btns = [...nav.querySelectorAll("[data-target]")];
+    if (!btns.length) return;
+    const header = $(".site-header");
+
+    // keep the sticky sub-nav parked right below the (also sticky) site header
+    function positionNav() { nav.style.top = (header ? header.offsetHeight : 0) + "px"; }
+    positionNav();
+    window.addEventListener("resize", positionNav);
+
+    function scrollToTarget(id, smooth = true) {
+      const target = document.getElementById(id);
+      if (!target) return;
+      if (target.tagName === "DETAILS") target.open = true;   // reveal collapsed sections
+      const offset = (header ? header.offsetHeight : 0) + nav.offsetHeight + 16;
+      const y = target.getBoundingClientRect().top + window.scrollY - offset;
+      if (smooth) {
+        window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
+      } else {
+        const root = document.documentElement;
+        const previous = root.style.scrollBehavior;
+        root.style.scrollBehavior = "auto";
+        window.scrollTo(0, Math.max(0, y));
+        requestAnimationFrame(() => { root.style.scrollBehavior = previous; });
+      }
+    }
+    btns.forEach((b) => b.addEventListener("click", (event) => {
+      event.preventDefault();
+      const href = b.getAttribute("href");
+      if (href && location.hash !== href) history.pushState(null, "", href);
+      scrollToTarget(b.dataset.target, event.isTrusted);
+      setActive(b.dataset.target);
+    }));
+
+    // scrollspy: highlight whichever section currently sits in the viewport band.
+    // Track the live set of intersecting targets and mark the topmost (button order).
+    const setActive = (id) =>
+      btns.forEach((b) => b.classList.toggle("active", b.dataset.target === id));
+    if ("IntersectionObserver" in window) {
+      const visible = new Set();
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) visible.add(e.target.id); else visible.delete(e.target.id);
+        });
+        const active = btns.map((b) => b.dataset.target).find((id) => visible.has(id));
+        if (active) setActive(active);
+      }, { rootMargin: "-45% 0px -45% 0px", threshold: 0 });
+      btns.forEach((b) => {
+        const t = document.getElementById(b.dataset.target);
+        if (t) io.observe(t);
+      });
+    }
+
+    // hide a menu button whose target is absent or currently hidden
+    // (e.g. "이전 대비 변동" only exists for years that have a predecessor)
+    function syncVisibility() {
+      btns.forEach((b) => {
+        const t = document.getElementById(b.dataset.target);
+        b.hidden = !t || t.hidden;
+      });
+      nav.hidden = btns.every((b) => b.hidden);
+    }
+    syncVisibility();
+    sectionNavs.push({ syncVisibility });
+  }
+
+  function initSectionNavs() {
+    document.querySelectorAll(".section-nav").forEach(initSectionNav);
+  }
+  function syncSectionNavs() { sectionNavs.forEach((n) => n.syncVisibility()); }
+
   /* ---------------- view menu (대시보드 / 한국 개최 / 달력 / 목록) ---------------- */
   function initViews() {
-    const tabs = document.querySelectorAll(".view-tabs button");
+    const tabs = document.querySelectorAll(".view-tabs [data-view]");
     const views = {
       dashboard: $("#view-dashboard"),
       korea: $("#view-korea"),
       calendar: $("#view-calendar"),
       list: $("#view-list"),
     };
-    function show(name) {
+    function show(name, keepSection = false) {
       if (!views[name]) name = "dashboard";
       Object.entries(views).forEach(([k, v]) => { v.hidden = k !== name; });
       tabs.forEach((b) => b.classList.toggle("active", b.dataset.view === name));
-      history.replaceState(null, "", "#" + name);
+      if (!keepSection) history.replaceState(null, "", "#" + name);
     }
-    tabs.forEach((b) => { b.onclick = () => show(b.dataset.view); });
-    window.addEventListener("hashchange", () => show(location.hash.slice(1)));
-    show(location.hash.slice(1) || "dashboard");
+    function openHash() {
+      const hash = location.hash.slice(1);
+      const sectionTarget = document.getElementById(hash);
+      const sectionView = sectionTarget && sectionTarget.closest('[id^="view-"]');
+      const section = sectionView ? hash : null;
+      const sectionViewName = sectionView ? sectionView.id.replace("view-", "") : null;
+      const view = section ? sectionViewName : (views[hash] ? hash : "dashboard");
+      show(view, Boolean(section));
+      if (section) {
+        if (sectionTarget.tagName === "DETAILS") sectionTarget.open = true;
+        sectionView.querySelectorAll(".section-nav [data-target]").forEach((link) => {
+          link.classList.toggle("active", link.dataset.target === section);
+        });
+      }
+    }
+    window.addEventListener("hashchange", openHash);
+    openHash();
   }
 
   /* ---------------- apply language to static markup ---------------- */
@@ -895,17 +998,20 @@
 
   function monthStats() {
     const items = kiiseDeadlines();
+    const empty = () => ({ n: 0, paper: 0, abstract: 0, other: 0, confirmed: 0, estimated: 0, confs: new Set() });
     const by = {};
     items.forEach((it) => {
       const k = it.date.slice(0, 7);
-      const m = by[k] || (by[k] = { n: 0, paper: 0, abstract: 0, other: 0, confs: new Set() });
+      const m = by[k] || (by[k] = empty());
       m.n++;
       m[it.kind === "논문" ? "paper" : it.kind === "초록" ? "abstract" : "other"]++;
+      m[isConfirmed(it) ? "confirmed" : "estimated"]++;
       m.confs.add(it.abbr);
     });
     return monthKeys12().map((mk) => {
-      const m = by[mk.key] || { n: 0, paper: 0, abstract: 0, other: 0, confs: new Set() };
-      return { ...mk, count: m.n, paper: m.paper, abstract: m.abstract, other: m.other, confCount: m.confs.size };
+      const m = by[mk.key] || empty();
+      return { ...mk, count: m.n, paper: m.paper, abstract: m.abstract, other: m.other,
+               confirmed: m.confirmed, estimated: m.estimated, confCount: m.confs.size };
     });
   }
 
@@ -975,8 +1081,17 @@
   initConfSearch();
   initCalendar();
   initKorea();
+  initSectionNavs();
   initViews();
   refresh();
   renderMonthChart();
+  syncSectionNavs();   // month-card 등 렌더 후 최종 버튼 노출 상태 동기화
+  // Re-apply a direct section URL after dynamic charts/lists have established
+  // their final heights; otherwise content inserted above can shift the target.
+  window.setTimeout(() => {
+    const id = location.hash.slice(1);
+    const link = document.querySelector(`.section-nav [data-target="${window.CSS.escape(id)}"]`);
+    if (link) link.click();
+  }, 150);
   initTheme();
 })();

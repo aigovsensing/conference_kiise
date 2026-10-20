@@ -15,7 +15,9 @@ merged into deadlines.js only (tagged "cat": "misc"); data/deadlines.json
 stays KIISE-only.
 
 All projected dates are estimates based on the previous cycle; the
-dashboard already labels them as such. Run weekly via GitHub Actions
+dashboard already labels them as such. An entry verified against the
+official CFP may carry "status": "confirmed" (shown as 확정); the flag is
+dropped when the entry is projected to later years. Run weekly via GitHub Actions
 (.github/workflows/update-deadlines.yml) or manually:
 
   python3 scripts/update_deadlines.py
@@ -55,6 +57,7 @@ def shift_years(item: dict, years: int) -> dict:
         nd = d.replace(year=d.year + years, day=28)
     out = dict(item)
     out["date"] = nd.isoformat()
+    out.pop("status", None)  # a projected date is always an estimate
     edition = str(item.get("edition", ""))
     if edition.isdigit():
         out["edition"] = str(int(edition) + years)

@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-27",
+  "updated": "2026-10-01",
   "specialWatch": [
     "ICML",
     "ICLR",
@@ -16,30 +16,6 @@
     "INTERSPEECH"
   ],
   "items": [
-    {
-      "abbr": "ICML",
-      "edition": "2026",
-      "year": 2026,
-      "country": "KR",
-      "name": "International Conference on Machine Learning",
-      "city": "서울",
-      "cityEn": "Seoul",
-      "venue": "COEX",
-      "start": "2026-07-06",
-      "end": "2026-07-11",
-      "deadlines": [
-        {
-          "kind": "초록",
-          "date": "2026-01-22"
-        },
-        {
-          "kind": "논문",
-          "date": "2026-01-28"
-        }
-      ],
-      "site": "https://icml.cc/",
-      "confirmed": true
-    },
     {
       "abbr": "KDD",
       "edition": "2026",
@@ -166,6 +142,32 @@
       "end": "2028-06-02",
       "deadlines": [],
       "site": "https://2028.ieeeicassp.org/",
+      "confirmed": true
+    }
+  ],
+  "past": [
+    {
+      "abbr": "ICML",
+      "edition": "2026",
+      "year": 2026,
+      "country": "KR",
+      "name": "International Conference on Machine Learning",
+      "city": "서울",
+      "cityEn": "Seoul",
+      "venue": "COEX",
+      "start": "2026-07-06",
+      "end": "2026-07-11",
+      "deadlines": [
+        {
+          "kind": "초록",
+          "date": "2026-01-22"
+        },
+        {
+          "kind": "논문",
+          "date": "2026-01-28"
+        }
+      ],
+      "site": "https://icml.cc/",
       "confirmed": true
     }
   ]
