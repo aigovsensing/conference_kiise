@@ -6,176 +6,28 @@
 // 실제 마감일은 반드시 각 학회 공식 홈페이지에서 확인해야 합니다.
 // abbr 은 docs/assets/data.js 의 약칭과 일치해야 캘린더 칩이 학회 정보와 연결됩니다.
 window.KIISE_DEADLINES = {
-  "updated": "2026-07-26",
+  "updated": "2026-10-20",
   "items": [
-    {
-      "abbr": "SIGMETRICS",
-      "edition": "2027",
-      "kind": "초록",
-      "date": "2026-07-03",
-      "note": "1차 라운드"
-    },
-    {
-      "abbr": "SODA",
-      "edition": "2027",
-      "kind": "초록",
-      "date": "2026-07-06"
-    },
-    {
-      "abbr": "POPL",
-      "edition": "2027",
-      "kind": "논문",
-      "date": "2026-07-09"
-    },
-    {
-      "abbr": "SODA",
-      "edition": "2027",
-      "kind": "논문",
-      "date": "2026-07-09"
-    },
-    {
-      "abbr": "SIGMETRICS",
-      "edition": "2027",
-      "kind": "논문",
-      "date": "2026-07-10",
-      "note": "1차 라운드"
-    },
-    {
-      "abbr": "SIGMOD",
-      "edition": "2027",
-      "kind": "초록",
-      "date": "2026-07-10",
-      "note": "1차 라운드"
-    },
-    {
-      "abbr": "CHES",
-      "edition": "2027",
-      "kind": "논문",
-      "date": "2026-07-15",
-      "note": "분기 마감"
-    },
-    {
-      "abbr": "SIGMOD",
-      "edition": "2027",
-      "kind": "논문",
-      "date": "2026-07-17",
-      "note": "1차 라운드"
-    },
-    {
-      "abbr": "AAAI",
-      "edition": "2027",
-      "kind": "초록",
-      "date": "2026-07-21"
-    },
-    {
-      "abbr": "NDSS",
-      "edition": "2027",
-      "kind": "논문",
-      "date": "2026-07-22",
-      "note": "2차 라운드"
-    },
-    {
-      "abbr": "HPCA",
-      "edition": "2027",
-      "kind": "초록",
-      "date": "2026-07-24"
-    },
-    {
-      "abbr": "ICSE",
-      "edition": "2027",
-      "kind": "논문",
-      "date": "2026-07-24",
-      "note": "2차 라운드"
-    },
-    {
-      "abbr": "INFOCOM",
-      "edition": "2027",
-      "kind": "초록",
-      "date": "2026-07-24"
-    },
-    {
-      "abbr": "AAAI",
-      "edition": "2027",
-      "kind": "논문",
-      "date": "2026-07-28"
-    },
-    {
-      "abbr": "HPCA",
-      "edition": "2027",
-      "kind": "논문",
-      "date": "2026-07-31"
-    },
-    {
-      "abbr": "INFOCOM",
-      "edition": "2027",
-      "kind": "논문",
-      "date": "2026-07-31"
-    },
-    {
-      "abbr": "KDD",
-      "edition": "2027",
-      "kind": "초록",
-      "date": "2026-08-01",
-      "note": "1차 라운드"
-    },
-    {
-      "abbr": "UBICOMP",
-      "edition": "2027",
-      "kind": "논문",
-      "date": "2026-08-01",
-      "note": "IMWUT 분기 마감"
-    },
-    {
-      "abbr": "VLDB",
-      "edition": "2027",
-      "kind": "논문",
-      "date": "2026-08-01",
-      "note": "롤링(매월 1일)"
-    },
-    {
-      "abbr": "WSDM",
-      "edition": "2027",
-      "kind": "초록",
-      "date": "2026-08-03"
-    },
-    {
-      "abbr": "PPoPP",
-      "edition": "2027",
-      "kind": "초록",
-      "date": "2026-08-04"
-    },
-    {
-      "abbr": "WSDM",
-      "edition": "2027",
-      "kind": "논문",
-      "date": "2026-08-06"
-    },
-    {
-      "abbr": "KDD",
-      "edition": "2027",
-      "kind": "논문",
-      "date": "2026-08-08",
-      "note": "1차 라운드"
-    },
-    {
-      "abbr": "PPoPP",
-      "edition": "2027",
-      "kind": "논문",
-      "date": "2026-08-11"
-    },
-    {
-      "abbr": "MobiCom",
-      "edition": "2027",
-      "kind": "논문",
-      "date": "2026-08-15",
-      "note": "2차 라운드"
-    },
     {
       "abbr": "USENIX Security",
       "edition": "2027",
       "kind": "논문",
       "date": "2026-08-26",
       "note": "1차 라운드"
+    },
+    {
+      "abbr": "AI4NextG",
+      "edition": "2026",
+      "kind": "논문",
+      "date": "2026-08-29",
+      "cat": "misc"
+    },
+    {
+      "abbr": "NeurIPS Workshops (SLM)",
+      "edition": "2026",
+      "kind": "논문",
+      "date": "2026-08-29",
+      "cat": "misc"
     },
     {
       "abbr": "VLDB",
@@ -195,6 +47,20 @@ window.KIISE_DEADLINES = {
       "edition": "2027",
       "kind": "초록",
       "date": "2026-09-04"
+    },
+    {
+      "abbr": "ICCE",
+      "edition": "2027",
+      "kind": "논문",
+      "date": "2026-09-08",
+      "cat": "misc"
+    },
+    {
+      "abbr": "ISSCC",
+      "edition": "2027",
+      "kind": "논문",
+      "date": "2026-09-08",
+      "cat": "misc"
     },
     {
       "abbr": "CHI",
@@ -219,6 +85,13 @@ window.KIISE_DEADLINES = {
       "edition": "2027",
       "kind": "논문",
       "date": "2026-09-15"
+    },
+    {
+      "abbr": "SAC",
+      "edition": "2027",
+      "kind": "논문",
+      "date": "2026-09-15",
+      "cat": "misc"
     },
     {
       "abbr": "EuroSys",
@@ -258,6 +131,13 @@ window.KIISE_DEADLINES = {
       "date": "2026-10-01"
     },
     {
+      "abbr": "HRI",
+      "edition": "2027",
+      "kind": "논문",
+      "date": "2026-10-01",
+      "cat": "misc"
+    },
+    {
       "abbr": "IPDPS",
       "edition": "2027",
       "kind": "초록",
@@ -269,6 +149,13 @@ window.KIISE_DEADLINES = {
       "kind": "논문",
       "date": "2026-10-01",
       "note": "롤링(매월 1일)"
+    },
+    {
+      "abbr": "ICC",
+      "edition": "2027",
+      "kind": "논문",
+      "date": "2026-10-03",
+      "cat": "misc"
     },
     {
       "abbr": "NAACL",
@@ -342,10 +229,24 @@ window.KIISE_DEADLINES = {
       "note": "1차 라운드"
     },
     {
+      "abbr": "AAAI Workshops (DAI)",
+      "edition": "2027",
+      "kind": "논문",
+      "date": "2026-10-24",
+      "cat": "misc"
+    },
+    {
       "abbr": "ISSTA",
       "edition": "2027",
       "kind": "논문",
       "date": "2026-10-29"
+    },
+    {
+      "abbr": "ICACT",
+      "edition": "2027",
+      "kind": "논문",
+      "date": "2026-10-31",
+      "cat": "misc"
     },
     {
       "abbr": "UBICOMP",
@@ -366,6 +267,13 @@ window.KIISE_DEADLINES = {
       "edition": "2027",
       "kind": "논문",
       "date": "2026-11-03"
+    },
+    {
+      "abbr": "VTC-Spring",
+      "edition": "2027",
+      "kind": "논문",
+      "date": "2026-11-03",
+      "cat": "misc"
     },
     {
       "abbr": "CVPR",
@@ -434,6 +342,13 @@ window.KIISE_DEADLINES = {
       "edition": "2027",
       "kind": "초록",
       "date": "2026-12-03"
+    },
+    {
+      "abbr": "ICME",
+      "edition": "2027",
+      "kind": "논문",
+      "date": "2026-12-05",
+      "cat": "misc"
     },
     {
       "abbr": "USENIX OSDI",
@@ -524,6 +439,13 @@ window.KIISE_DEADLINES = {
       "date": "2027-01-23"
     },
     {
+      "abbr": "ICIP",
+      "edition": "2027",
+      "kind": "논문",
+      "date": "2027-01-28",
+      "cat": "misc"
+    },
+    {
       "abbr": "ICML",
       "edition": "2027",
       "kind": "논문",
@@ -540,6 +462,13 @@ window.KIISE_DEADLINES = {
       "edition": "2027",
       "kind": "초록",
       "date": "2027-01-29"
+    },
+    {
+      "abbr": "ICLR Workshops (ReALM-GEN)",
+      "edition": "2027",
+      "kind": "논문",
+      "date": "2027-02-01",
+      "cat": "misc"
     },
     {
       "abbr": "UBICOMP",
@@ -613,6 +542,13 @@ window.KIISE_DEADLINES = {
       "date": "2027-03-08"
     },
     {
+      "abbr": "CVPR Workshops",
+      "edition": "2027",
+      "kind": "논문",
+      "date": "2027-03-10",
+      "cat": "misc"
+    },
+    {
       "abbr": "OOPSLA",
       "edition": "2027",
       "kind": "논문",
@@ -630,6 +566,13 @@ window.KIISE_DEADLINES = {
       "edition": "2027",
       "kind": "초록",
       "date": "2027-03-31"
+    },
+    {
+      "abbr": "GLOBECOM",
+      "edition": "2027",
+      "kind": "논문",
+      "date": "2027-04-01",
+      "cat": "misc"
     },
     {
       "abbr": "SC",
@@ -705,6 +648,13 @@ window.KIISE_DEADLINES = {
       "date": "2027-04-29"
     },
     {
+      "abbr": "MLSP",
+      "edition": "2027",
+      "kind": "논문",
+      "date": "2027-04-30",
+      "cat": "misc"
+    },
+    {
       "abbr": "UBICOMP",
       "edition": "2027",
       "kind": "논문",
@@ -743,10 +693,24 @@ window.KIISE_DEADLINES = {
       "date": "2027-05-20"
     },
     {
+      "abbr": "KDD Workshops (epiDAMIK)",
+      "edition": "2027",
+      "kind": "논문",
+      "date": "2027-05-25",
+      "cat": "misc"
+    },
+    {
       "abbr": "RTSS",
       "edition": "2027",
       "kind": "논문",
       "date": "2027-05-27"
+    },
+    {
+      "abbr": "ASRU",
+      "edition": "2027",
+      "kind": "논문",
+      "date": "2027-05-28",
+      "cat": "misc"
     },
     {
       "abbr": "ASE",
@@ -759,6 +723,20 @@ window.KIISE_DEADLINES = {
       "edition": "2027",
       "kind": "논문",
       "date": "2027-06-11"
+    },
+    {
+      "abbr": "APSEC",
+      "edition": "2027",
+      "kind": "논문",
+      "date": "2027-07-01",
+      "cat": "misc"
+    },
+    {
+      "abbr": "ICCV Workshops",
+      "edition": "2027",
+      "kind": "논문",
+      "date": "2027-07-01",
+      "cat": "misc"
     },
     {
       "abbr": "SIGMETRICS",
@@ -916,6 +894,13 @@ window.KIISE_DEADLINES = {
       "date": "2027-08-11"
     },
     {
+      "abbr": "WMT",
+      "edition": "2027",
+      "kind": "논문",
+      "date": "2027-08-14",
+      "cat": "misc"
+    },
+    {
       "abbr": "MobiCom",
       "edition": "2028",
       "kind": "논문",
@@ -923,11 +908,327 @@ window.KIISE_DEADLINES = {
       "note": "2차 라운드"
     },
     {
+      "abbr": "3DV",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-08-18",
+      "cat": "misc"
+    },
+    {
       "abbr": "USENIX Security",
       "edition": "2028",
       "kind": "논문",
       "date": "2027-08-26",
       "note": "1차 라운드"
+    },
+    {
+      "abbr": "AI4NextG",
+      "edition": "2027",
+      "kind": "논문",
+      "date": "2027-08-29",
+      "cat": "misc"
+    },
+    {
+      "abbr": "NeurIPS Workshops (SLM)",
+      "edition": "2027",
+      "kind": "논문",
+      "date": "2027-08-29",
+      "cat": "misc"
+    },
+    {
+      "abbr": "VLDB",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-09-01",
+      "note": "롤링(매월 1일)"
+    },
+    {
+      "abbr": "CHI",
+      "edition": "2028",
+      "kind": "초록",
+      "date": "2027-09-03"
+    },
+    {
+      "abbr": "USENIX NSDI",
+      "edition": "2028",
+      "kind": "초록",
+      "date": "2027-09-04"
+    },
+    {
+      "abbr": "ICCE",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-09-08",
+      "cat": "misc"
+    },
+    {
+      "abbr": "ISSCC",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-09-08",
+      "cat": "misc"
+    },
+    {
+      "abbr": "CHI",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-09-10"
+    },
+    {
+      "abbr": "FSE",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-09-11"
+    },
+    {
+      "abbr": "USENIX NSDI",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-09-11"
+    },
+    {
+      "abbr": "ICRA",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-09-15"
+    },
+    {
+      "abbr": "SAC",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-09-15",
+      "cat": "misc"
+    },
+    {
+      "abbr": "EuroSys",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-09-17",
+      "note": "가을 라운드"
+    },
+    {
+      "abbr": "ICASSP",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-09-17"
+    },
+    {
+      "abbr": "ICLR",
+      "edition": "2028",
+      "kind": "초록",
+      "date": "2027-09-18"
+    },
+    {
+      "abbr": "USENIX FAST",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-09-22"
+    },
+    {
+      "abbr": "ICLR",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-09-23"
+    },
+    {
+      "abbr": "EUROCRYPT",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-10-01"
+    },
+    {
+      "abbr": "HRI",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-10-01",
+      "cat": "misc"
+    },
+    {
+      "abbr": "IPDPS",
+      "edition": "2028",
+      "kind": "초록",
+      "date": "2027-10-01"
+    },
+    {
+      "abbr": "VLDB",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-10-01",
+      "note": "롤링(매월 1일)"
+    },
+    {
+      "abbr": "ICC",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-10-03",
+      "cat": "misc"
+    },
+    {
+      "abbr": "NAACL",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-10-06",
+      "note": "ARR 마감"
+    },
+    {
+      "abbr": "WWW",
+      "edition": "2028",
+      "kind": "초록",
+      "date": "2027-10-06"
+    },
+    {
+      "abbr": "ICDE",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-10-07",
+      "note": "1차 라운드"
+    },
+    {
+      "abbr": "AAMAS",
+      "edition": "2028",
+      "kind": "초록",
+      "date": "2027-10-08"
+    },
+    {
+      "abbr": "IPDPS",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-10-08"
+    },
+    {
+      "abbr": "ASPLOS",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-10-13",
+      "note": "가을 라운드"
+    },
+    {
+      "abbr": "WWW",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-10-13"
+    },
+    {
+      "abbr": "AAMAS",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-10-15"
+    },
+    {
+      "abbr": "CHES",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-10-15",
+      "note": "분기 마감"
+    },
+    {
+      "abbr": "CSCW",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-10-15"
+    },
+    {
+      "abbr": "OOPSLA",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-10-20",
+      "note": "1차 라운드"
+    },
+    {
+      "abbr": "AAAI Workshops (DAI)",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-10-24",
+      "cat": "misc"
+    },
+    {
+      "abbr": "ISSTA",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-10-29"
+    },
+    {
+      "abbr": "ICACT",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-10-31",
+      "cat": "misc"
+    },
+    {
+      "abbr": "UBICOMP",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-11-01",
+      "note": "IMWUT 분기 마감"
+    },
+    {
+      "abbr": "VLDB",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-11-01",
+      "note": "롤링(매월 1일)"
+    },
+    {
+      "abbr": "STOC",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-11-03"
+    },
+    {
+      "abbr": "VTC-Spring",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-11-03",
+      "cat": "misc"
+    },
+    {
+      "abbr": "CVPR",
+      "edition": "2028",
+      "kind": "초록",
+      "date": "2027-11-06"
+    },
+    {
+      "abbr": "PLDI",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-11-10"
+    },
+    {
+      "abbr": "S&P",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-11-12",
+      "note": "2차 라운드"
+    },
+    {
+      "abbr": "CVPR",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-11-13"
+    },
+    {
+      "abbr": "DAC",
+      "edition": "2028",
+      "kind": "초록",
+      "date": "2027-11-13"
+    },
+    {
+      "abbr": "ISCA",
+      "edition": "2028",
+      "kind": "초록",
+      "date": "2027-11-13"
+    },
+    {
+      "abbr": "DAC",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-11-20"
+    },
+    {
+      "abbr": "ISCA",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-11-20"
     }
   ]
 };

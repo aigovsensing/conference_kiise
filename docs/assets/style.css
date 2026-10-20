@@ -17,6 +17,8 @@
   /* grade ordinal (S higher tier = darker) */
   --grade-s:      #2a78d6;
   --grade-a:      #9ec5f4;
+  /* 기타 (KIISE 비지정, 참고용) = 중립 회색 */
+  --grade-m:      #c3c1b8;
   /* secondary chart hue (month chart: 초록 마감) */
   --chart-2:      #7c5cff;
 
@@ -39,6 +41,7 @@
     --ai:         #1fa11f;
     --grade-s:    #3987e5;
     --grade-a:    #5598e7;
+    --grade-m:    #85847d;
     --chart-2:    #9b83ff;
   }
 }
@@ -56,6 +59,7 @@
   --ai:         #1fa11f;
   --grade-s:    #3987e5;
   --grade-a:    #5598e7;
+  --grade-m:    #85847d;
   --chart-2:    #9b83ff;
 }
 
@@ -109,7 +113,7 @@ h1, h2 { margin: 0; font-weight: 700; letter-spacing: -0.01em; }
 
 /* ---------- tiles ---------- */
 .tiles {
-  display: grid; grid-template-columns: repeat(5, 1fr);
+  display: grid; grid-template-columns: repeat(6, 1fr);
   gap: 14px; margin: 26px 0;
 }
 .tile {
@@ -224,6 +228,10 @@ a.conf-link::after { content: " ↗"; font-size: .72em; opacity: .5; }
 .pill.cs { background: color-mix(in srgb, var(--cs) 16%, transparent); color: var(--cs); }
 .pill.grade-s { background: var(--grade-s); color: #fff; }
 .pill.grade-a { background: color-mix(in srgb, var(--grade-a) 55%, transparent); color: var(--text); }
+.pill.grade-m { background: color-mix(in srgb, var(--grade-m) 45%, transparent); color: var(--text-2); }
+/* 기타 학회 행: 참고용임을 드러내도록 살짝 흐리게 */
+tr.misc-row td { color: var(--text-2); }
+.conf-site { text-decoration: none; font-size: .8rem; margin-left: 2px; }
 .note-tag { color: var(--muted); font-size: .76rem; }
 
 .empty { text-align: center; color: var(--muted); padding: 32px 0; }
@@ -444,6 +452,17 @@ a.conf-link::after { content: " ↗"; font-size: .72em; opacity: .5; }
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;
 }
 .cal-chip:hover { filter: brightness(1.12); }
+/* 기타(참고용) 학회 마감: 회색 점선 칩 */
+.cal-chip.misc {
+  background: var(--surface-2); color: var(--text-2);
+  border: 1px dashed var(--muted); font-weight: 600;
+}
+.cal-chip.misc:hover { filter: none; border-color: var(--text-2); }
+.cal-filter { margin-left: auto; }
+@media (max-width: 560px) {
+  .cal-toolbar { flex-wrap: wrap; }
+  .cal-filter { margin-left: 0; width: 100%; justify-content: center; }
+}
 @media (max-width: 720px) {
   .cal-grid, .cal-dow { gap: 3px; }
   .cal-cell { min-height: 62px; padding: 4px; border-radius: 7px; }
@@ -458,6 +477,8 @@ a.conf-link::after { content: " ↗"; font-size: .72em; opacity: .5; }
   border-radius: 12px; background: var(--surface); padding: 12px 14px;
 }
 .up-item:hover { background: var(--surface-2); }
+.up-item.misc { border-left: 5px dashed var(--grade-m); }
+.up-item.misc .up-title b { color: var(--text-2); }
 .up-dday {
   flex: 0 0 96px; display: flex; flex-direction: column; gap: 2px; text-align: center;
   font-weight: 800; font-size: 1.06rem; color: var(--text);
@@ -485,7 +506,7 @@ a.conf-link::after { content: " ↗"; font-size: .72em; opacity: .5; }
 .site-footer { border-top: 1px solid var(--border); margin-top: 40px; padding: 26px 0 48px; }
 .site-footer p { margin: 4px 0; font-size: .82rem; color: var(--text-2); }
 .site-footer .muted { color: var(--muted); font-size: .78rem; }
-.site-footer code { background: var(--surface-2); padding: 1px 6px; border-radius: 5px; font-size: .92em; }
+.site-footer code { background: var(--surface-2); padding: 1px 6px; border-radius: 5px; font-size: .92em; overflow-wrap: anywhere; }
 
 /* ---------- responsive ---------- */
 @media (max-width: 860px) {

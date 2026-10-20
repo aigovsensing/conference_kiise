@@ -9,7 +9,9 @@
   const deleted = DATA.deleted || [];
   const majorNames = DATA.majorNames || {};
   const years = DATA.years || [];
-  const GRADE_RANK = { S: 0, A: 1 };
+  // S = 최우수, A = 우수 (KIISE 지정), M = 기타 (KIISE 비지정 일반 해외 학회, 참고용)
+  const GRADE_RANK = { S: 0, A: 1, M: 2 };
+  const isMisc = (r) => r.grade === "M";
 
   /* ---------------- language (KO/EN) ---------------- */
   const LANG = localStorage.getItem("kiise-lang") === "en" ? "en" : "ko";
@@ -35,7 +37,9 @@
   const yearKeys = {};
   years.forEach((y) => {
     const m = new Map();
-    allRecords.forEach((r) => { if (r.year === y && !m.has(confKey(r))) m.set(confKey(r), r); });
+    allRecords.forEach((r) => {
+      if (r.year === y && !isMisc(r) && !m.has(confKey(r))) m.set(confKey(r), r);
+    });
     yearKeys[y] = m;
   });
 
@@ -98,6 +102,7 @@
       { val: records.length, lbl: T.tileAll, dot: null },
       { val: count(records, (r) => r.grade === "S"), lbl: T.tileS, dot: color("--grade-s") },
       { val: count(records, (r) => r.grade === "A"), lbl: T.tileA, dot: color("--grade-a") },
+      { val: count(records, isMisc), lbl: T.tileM, dot: color("--grade-m") },
       { val: majors.length, lbl: T.tileMajor, dot: null },
       { val: subs.length, lbl: T.tileSub, dot: null },
     ];
@@ -119,7 +124,8 @@
     majors.forEach((m) => {
       const s = count(records, (r) => r.major === m && r.grade === "S");
       const a = count(records, (r) => r.major === m && r.grade === "A");
-      const total = s + a;
+      const o = count(records, (r) => r.major === m && isMisc(r));
+      const total = s + a + o;
       const row = el("div", "mrow");
       row.appendChild(el("div", "mk",
         `<b>${m}</b> <small>${majorNames[m] || ""}</small>`));
@@ -131,34 +137,41 @@
         seg.style.flexBasis = (val / total * 100) + "%";
         if (dark) { seg.style.color = "#0b0b0b"; seg.style.textShadow = "none"; }
         bindTip(seg, () =>
-          `<b>${m} · ${gradeLabel === "S" ? T.gradeSFull : T.gradeAFull}</b><br>${T.cnt(val)} ` +
+          `<b>${m} · ${T.gradeFull(gradeLabel)}</b><br>${T.cnt(val)} ` +
           `<span class="tt-sub">${T.inMajorPct(m, (val / total * 100).toFixed(0))}</span>`);
         return seg;
       };
       stack.append(
         mkSeg(s, color("--grade-s"), false, "S"),
-        mkSeg(a, color("--grade-a"), true, "A"));
+        mkSeg(a, color("--grade-a"), true, "A"),
+        mkSeg(o, color("--grade-m"), true, "M"));
       row.appendChild(stack);
       host.appendChild(row);
     });
     $("#legend-grade").innerHTML =
       `<span><i style="background:${color("--grade-s")}"></i> ${T.gradeSFull}</span>` +
-      `<span><i style="background:${color("--grade-a")}"></i> ${T.gradeAFull}</span>`;
+      `<span><i style="background:${color("--grade-a")}"></i> ${T.gradeAFull}</span>` +
+      `<span><i style="background:${color("--grade-m")}"></i> ${T.gradeMFull}</span>`;
   }
 
   /* ---------------- grade donut (with tooltip) ---------------- */
   function renderGrade(records) {
     const host = $("#chart-grade");
     host.innerHTML = "";
-    const s = count(records, (r) => r.grade === "S");
-    const a = count(records, (r) => r.grade === "A");
-    const total = s + a || 1;
-    const sPct = (s / total * 100);
-    const cS = color("--grade-s"), cA = color("--grade-a");
+    // S → A → 기타 순서로 시계 방향 세그먼트
+    const segs = [
+      { g: "S", n: count(records, (r) => r.grade === "S"), c: color("--grade-s") },
+      { g: "A", n: count(records, (r) => r.grade === "A"), c: color("--grade-a") },
+      { g: "M", n: count(records, isMisc), c: color("--grade-m") },
+    ];
+    const total = records.length || 1;
+    let acc = 0;
+    segs.forEach((sg) => { sg.from = acc; acc += sg.n / total * 100; sg.to = acc; });
 
     const donut = el("div", "donut");
-    donut.style.background = `conic-gradient(${cS} 0 ${sPct}%, ${cA} ${sPct}% 100%)`;
-    donut.appendChild(el("div", "donut-center", `<b>${total}</b><small>${T.donutUnit}</small>`));
+    donut.style.background = "conic-gradient(" +
+      segs.map((sg) => `${sg.c} ${sg.from}% ${sg.to}%`).join(", ") + ")";
+    donut.appendChild(el("div", "donut-center", `<b>${records.length}</b><small>${T.donutUnit}</small>`));
 
     // segment detection by angle (clockwise from 12 o'clock)
     donut.addEventListener("mousemove", (e) => {
@@ -170,17 +183,17 @@
       let ang = Math.atan2(dx, -dy) * 180 / Math.PI; // 0=top, cw+
       if (ang < 0) ang += 360;
       const pct = ang / 360 * 100;
-      const isS = pct < sPct;
+      const sg = segs.find((x) => pct < x.to) || segs[segs.length - 1];
       showTip(
-        `<b>${isS ? T.gradeSFull : T.gradeAFull}</b><br>${T.cnt(isS ? s : a)} ` +
-        `<span class="tt-sub">(${((isS ? s : a) / total * 100).toFixed(0)}%)</span>`,
+        `<b>${T.gradeFull(sg.g)}</b><br>${T.cnt(sg.n)} ` +
+        `<span class="tt-sub">(${(sg.n / total * 100).toFixed(0)}%)</span>`,
         e.clientX, e.clientY);
     });
     donut.addEventListener("mouseleave", hideTip);
 
-    const legend = el("div", "donut-legend",
-      `<span><i style="background:${cS}"></i> ${T.gradeSFull} &nbsp; <b>${s}</b> (${sPct.toFixed(0)}%)</span>` +
-      `<span><i style="background:${cA}"></i> ${T.gradeAFull} &nbsp; <b>${a}</b> (${(100 - sPct).toFixed(0)}%)</span>`);
+    const legend = el("div", "donut-legend", segs.map((sg) =>
+      `<span><i style="background:${sg.c}"></i> ${T.gradeFull(sg.g)} &nbsp; ` +
+      `<b>${sg.n}</b> (${(sg.n / total * 100).toFixed(0)}%)</span>`).join(""));
     host.append(donut, legend);
   }
 
@@ -190,9 +203,9 @@
     host.innerHTML = "";
     const map = new Map();
     records.forEach((r) => {
-      if (!map.has(r.sub)) map.set(r.sub, { sub: r.sub, subName: r.subName, major: r.major, n: 0, s: 0, a: 0 });
+      if (!map.has(r.sub)) map.set(r.sub, { sub: r.sub, subName: r.subName, major: r.major, n: 0, s: 0, a: 0, m: 0 });
       const o = map.get(r.sub);
-      o.n++; o[r.grade === "S" ? "s" : "a"]++;
+      o.n++; o[r.grade === "S" ? "s" : r.grade === "A" ? "a" : "m"]++;
     });
     const rows = [...map.values()].sort((x, y) => y.n - x.n);
     const max = Math.max(1, ...rows.map((r) => r.n));
@@ -209,7 +222,7 @@
       bindTip(track, () =>
         `<b>${r.sub} · ${r.subName}</b><br>` +
         `${T.totalCnt(r.n)} <span class="tt-sub">(${r.major})</span><br>` +
-        `<span class="tt-sub">S ${r.s} · A ${r.a}</span>`);
+        `<span class="tt-sub">S ${r.s} · A ${r.a}` + (r.m ? ` · ${T.mShort} ${r.m}` : "") + `</span>`);
       host.appendChild(row);
     });
     $("#legend-major").innerHTML =
@@ -250,7 +263,7 @@
     });
     // grade chips
     const gg = $("#filter-grade");
-    [["ALL", T.all], ["S", T.sChip], ["A", T.aChip]].forEach(([v, label]) => {
+    [["ALL", T.all], ["S", T.sChip], ["A", T.aChip], ["M", T.mChip]].forEach(([v, label]) => {
       const b = el("button", "chip", label);
       b.dataset.val = v;
       b.setAttribute("aria-pressed", v === "ALL");
@@ -326,13 +339,16 @@
     pageRows.forEach((r) => {
       const tr = document.createElement("tr");
       const note = r.note ? `<span class="note-tag">${r.note}</span>` : "";
+      const site = r.url
+        ? ` <a class="conf-site" href="${r.url}" target="_blank" rel="noopener" title="${T.siteTitle}" aria-label="${T.siteTitle}">🔗</a>` : "";
+      if (isMisc(r)) tr.className = "misc-row";
       tr.innerHTML =
         `<td class="no">${r.no}</td>` +
         `<td><span class="pill ${r.major.toLowerCase()}">${r.major}</span></td>` +
         `<td>${r.sub}</td>` +
         `<td class="abbr"><b>${r.abbr}</b></td>` +
-        `<td class="name"><a href="#" class="conf-link" data-q="${confQuery(r)}" title="${T.confLinkTitle}">${r.name}</a></td>` +
-        `<td><span class="pill grade-${r.grade.toLowerCase()}">${r.grade}</span></td>` +
+        `<td class="name"><a href="#" class="conf-link" data-q="${confQuery(r)}" title="${T.confLinkTitle}">${r.name}</a>${site}</td>` +
+        `<td><span class="pill grade-${r.grade.toLowerCase()}">${T.gradeShort(r.grade)}</span></td>` +
         `<td>${note}</td>`;
       tbody.appendChild(tr);
     });
@@ -444,11 +460,16 @@
     renderChanges();
     // year filter 옆 요약: 전체 · S(최우수) · A(우수) 학회 수
     const sN = count(rec, (r) => r.grade === "S");
+    const aN = count(rec, (r) => r.grade === "A");
+    const mN = count(rec, isMisc);
     $("#year-summary").innerHTML =
       T.summaryConf(rec.length) +
       `<i class="ys-dot" style="background:${color("--grade-s")}"></i>S <b>${sN}</b> ` +
-      `<i class="ys-dot" style="background:${color("--grade-a")}"></i>A <b>${rec.length - sN}</b>`;
-    $("#tag-count").textContent = rec.length;
+      `<i class="ys-dot" style="background:${color("--grade-a")}"></i>A <b>${aN}</b> ` +
+      `<i class="ys-dot" style="background:${color("--grade-m")}"></i>${T.mShort} <b>${mN}</b>`;
+    // 헤더: KIISE 지정(S+A) 학회 수 + 기타(참고용) 학회 수
+    $("#tag-count").textContent = sN + aN;
+    $("#tag-misc").textContent = mN ? T.tagMisc(mN) : "";
     $("#tag-year").textContent =
       state.year === "ALL"
         ? (years.length > 1 ? T.yearRange(years[0], years[years.length - 1]) : T.yearOpt(years[0]))
@@ -492,14 +513,22 @@
     const grid = $("#cal-grid");
     const dl = window.KIISE_DEADLINES;
     if (!grid || !dl || !dl.items) { $("#deadline-card").hidden = true; return; }
+    let drawUpcoming = null; // set below once the upcoming list is wired up
 
-    // abbr -> record (prefer the latest survey year) for full names in tooltips
-    const byAbbr = new Map();
+    // abbr -> record (prefer the latest survey year) for full names in tooltips.
+    // 기타(misc) 마감 항목은 기타 학회 레코드와 따로 매칭한다.
+    const byAbbr = new Map(), miscByAbbr = new Map();
     for (let i = years.length - 1; i >= 0; i--) {
       allRecords.forEach((r) => {
-        if (r.year === years[i] && !byAbbr.has(r.abbr)) byAbbr.set(r.abbr, r);
+        const m = isMisc(r) ? miscByAbbr : byAbbr;
+        if (r.year === years[i] && !m.has(r.abbr)) m.set(r.abbr, r);
       });
     }
+    const recOf = (it) => (it.cat === "misc" ? miscByAbbr : byAbbr).get(it.abbr);
+    // 캘린더 분류 필터: 전체 / S / A / 기타
+    const catOf = (it) => (it.cat === "misc" ? "M" : (recOf(it) || {}).grade || "");
+    let calCat = "ALL";
+    const visible = (it) => calCat === "ALL" || catOf(it) === calCat;
 
     // group deadline items by date string
     const byDate = new Map();
@@ -507,6 +536,22 @@
       if (!byDate.has(it.date)) byDate.set(it.date, []);
       byDate.get(it.date).push(it);
     });
+
+    const cf = $("#cal-filter");
+    if (cf) {
+      [["ALL", T.all], ["S", T.sChip], ["A", T.aChip], ["M", T.mChip]].forEach(([v, label]) => {
+        const b = el("button", "chip", label);
+        b.type = "button";
+        b.dataset.val = v;
+        b.setAttribute("aria-pressed", v === "ALL");
+        b.onclick = () => {
+          calCat = v; setPressed(cf, v);
+          render();
+          if (drawUpcoming) drawUpcoming();
+        };
+        cf.appendChild(b);
+      });
+    }
 
     // stable per-conference chip color
     const PALETTE = ["#1a73e8", "#0b8457", "#8e24aa", "#e53935", "#f4511e", "#00897b",
@@ -536,12 +581,13 @@
           + (ds === todayStr ? " today" : "")
           + (i % 7 === 0 ? " sun" : ""));
         cell.appendChild(el("span", "cal-day", String(d.getDate())));
-        (byDate.get(ds) || []).forEach((it) => {
+        (byDate.get(ds) || []).filter(visible).forEach((it) => {
           const kindL = T.kind(it.kind);
-          const btn = el("button", "cal-chip", `${it.abbr} ${it.edition} ${kindL}`);
-          btn.style.background = chipColor(it.abbr);
-          const rec = byAbbr.get(it.abbr);
-          btn.title = T.chipTitle(it.abbr, it.edition, kindL, ds,
+          const misc = it.cat === "misc";
+          const btn = el("button", "cal-chip" + (misc ? " misc" : ""), `${it.abbr} ${it.edition} ${kindL}`);
+          if (!misc) btn.style.background = chipColor(it.abbr);
+          const rec = recOf(it);
+          btn.title = (misc ? T.miscPrefix : "") + T.chipTitle(it.abbr, it.edition, kindL, ds,
             it.note ? T.note(it.note) : "", rec ? rec.name : "");
           btn.onclick = () => {
             const q = encodeURIComponent(`${rec ? rec.name : it.abbr} ${it.edition} call for papers deadline`)
@@ -564,28 +610,30 @@
     if (upList) {
       const LIMIT = 12;
       const todayStr = fmt(new Date());
-      const upcoming = dl.items
+      const allUpcoming = dl.items
         .filter((it) => it.date >= todayStr)
         .sort((a, b) => a.date.localeCompare(b.date) || a.abbr.localeCompare(b.abbr));
       const moreBtn = $("#upcoming-more");
       let expanded = false;
 
       function searchFor(it) {
-        const rec = byAbbr.get(it.abbr);
+        const rec = recOf(it);
         const q = encodeURIComponent(`${rec ? rec.name : it.abbr} ${it.edition} call for papers deadline`)
           .replace(/'/g, "%27").replace(/"/g, "%22");
         openConfSearch(q, T.panelTitle(it.abbr, it.edition, T.kind(it.kind)));
       }
 
-      function drawUpcoming() {
+      drawUpcoming = function () {
         upList.innerHTML = "";
+        const upcoming = allUpcoming.filter(visible);
         const base = new Date(); base.setHours(0, 0, 0, 0);
         upcoming.slice(0, expanded ? upcoming.length : LIMIT).forEach((it) => {
           const d = new Date(it.date + "T00:00:00");
           const dday = Math.round((d - base) / 86400000);
-          const rec = byAbbr.get(it.abbr);
-          const li = el("li", "up-item");
-          li.style.borderLeftColor = chipColor(it.abbr);
+          const rec = recOf(it);
+          const misc = it.cat === "misc";
+          const li = el("li", "up-item" + (misc ? " misc" : ""));
+          if (!misc) li.style.borderLeftColor = chipColor(it.abbr);
           li.innerHTML =
             `<div class="up-dday${dday <= 7 ? " near" : ""}">` +
               `${dday === 0 ? "D-Day" : "D-" + dday}` +
@@ -605,9 +653,10 @@
           li.onclick = () => searchFor(it);
           upList.appendChild(li);
         });
+        if (!upcoming.length) upList.appendChild(el("li", "empty", T.none));
         moreBtn.hidden = upcoming.length <= LIMIT;
         moreBtn.textContent = expanded ? T.collapse : T.more(upcoming.length - LIMIT);
-      }
+      };
       moreBtn.onclick = () => { expanded = !expanded; drawUpcoming(); };
       drawUpcoming();
     }
@@ -837,10 +886,15 @@
   // abbr -> record (latest survey year) for full names in the month detail
   const dlByAbbr = new Map();
   for (let i = years.length - 1; i >= 0; i--)
-    allRecords.forEach((r) => { if (r.year === years[i] && !dlByAbbr.has(r.abbr)) dlByAbbr.set(r.abbr, r); });
+    allRecords.forEach((r) => {
+      if (r.year === years[i] && !isMisc(r) && !dlByAbbr.has(r.abbr)) dlByAbbr.set(r.abbr, r);
+    });
+  // 대시보드 월별 차트는 KIISE 지정(S/A) 학회 마감만 집계 — 기타(참고용)는 달력 화면에서만 표시
+  const kiiseDeadlines = () =>
+    ((window.KIISE_DEADLINES && window.KIISE_DEADLINES.items) || []).filter((it) => it.cat !== "misc");
 
   function monthStats() {
-    const items = (window.KIISE_DEADLINES && window.KIISE_DEADLINES.items) || [];
+    const items = kiiseDeadlines();
     const by = {};
     items.forEach((it) => {
       const k = it.date.slice(0, 7);
@@ -859,7 +913,7 @@
     const sel = stats.find((s) => s.key === state.dashMonth) || stats[0];
     $("#month-detail-heading").textContent = T.mcDetail(sel.year, T.month[sel.month - 1], sel.count);
     const box = $("#month-detail"); box.innerHTML = "";
-    const items = ((window.KIISE_DEADLINES || {}).items || [])
+    const items = kiiseDeadlines()
       .filter((it) => it.date.slice(0, 7) === sel.key)
       .sort((a, b) => a.date.localeCompare(b.date) || a.abbr.localeCompare(b.abbr));
     if (!items.length) { box.appendChild(el("p", "empty", T.none)); return; }

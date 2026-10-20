@@ -9,12 +9,18 @@ covers roughly [today - 60 days, today + 400 days], then rewrites:
   - docs/assets/deadlines.js   (asset consumed by the dashboard)
   - docs/index.html            (cache-busting ?v= stamp for deadlines.js)
 
+Deadlines of the 기타(misc) conferences live in the 초록마감/논문마감 columns
+of data/misc_sw_conferences_*.csv. They are projected the same way and
+merged into deadlines.js only (tagged "cat": "misc"); data/deadlines.json
+stays KIISE-only.
+
 All projected dates are estimates based on the previous cycle; the
 dashboard already labels them as such. Run weekly via GitHub Actions
 (.github/workflows/update-deadlines.yml) or manually:
 
   python3 scripts/update_deadlines.py
 """
+import csv
 import datetime
 import json
 import pathlib
@@ -22,6 +28,7 @@ import re
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SRC = ROOT / "data" / "deadlines.json"
+MISC_GLOB = "misc_sw_conferences_*.csv"
 OUT = ROOT / "docs" / "assets" / "deadlines.js"
 INDEX = ROOT / "docs" / "index.html"
 
@@ -54,16 +61,12 @@ def shift_years(item: dict, years: int) -> dict:
     return out
 
 
-def main() -> None:
-    today = datetime.date.today()
-    lo = today - datetime.timedelta(days=PAST_DAYS)
-    hi = today + datetime.timedelta(days=FUTURE_DAYS)
-
-    data = json.loads(SRC.read_text(encoding="utf-8"))
-
+def roll(seed: list, lo: datetime.date, hi: datetime.date) -> list:
+    """Project every seed item forward (every N years, default 1) into [lo, hi]."""
     seen = set()
     items = []
-    for item in data["items"]:
+    for item in seed:
+        every = int(item.pop("every", 1) or 1)
         n = 0
         while True:
             it = shift_years(item, n) if n else dict(item)
@@ -75,16 +78,43 @@ def main() -> None:
                 if key not in seen:
                     seen.add(key)
                     items.append(it)
-            n += 1
-
+            n += every
     items.sort(key=lambda i: (i["date"], i["abbr"], i["kind"]))
-    data["items"] = items
+    return items
+
+
+def misc_seed() -> list:
+    """Deadline seeds of the 기타 conferences (초록마감/논문마감 columns)."""
+    seed = []
+    for path in sorted((ROOT / "data").glob(MISC_GLOB)):
+        with path.open(encoding="utf-8-sig", newline="") as fh:
+            for row in csv.DictReader(fh):
+                row = {k: (v or "").strip() for k, v in row.items()}
+                for kind, col in (("초록", "초록마감"), ("논문", "논문마감")):
+                    if row.get("약칭") and row.get(col):
+                        seed.append({"abbr": row["약칭"], "edition": row["회차"],
+                                     "kind": kind, "date": row[col],
+                                     "cat": "misc", "every": row.get("주기") or 1})
+    return seed
+
+
+def main() -> None:
+    today = datetime.date.today()
+    lo = today - datetime.timedelta(days=PAST_DAYS)
+    hi = today + datetime.timedelta(days=FUTURE_DAYS)
+
+    data = json.loads(SRC.read_text(encoding="utf-8"))
+    data["items"] = roll(data["items"], lo, hi)
     data["updated"] = today.isoformat()
+    items = data["items"]
+    misc = roll(misc_seed(), lo, hi)
 
     SRC.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n",
                    encoding="utf-8")
+    out = dict(data, items=sorted(items + misc,
+                                  key=lambda i: (i["date"], i["abbr"], i["kind"])))
     OUT.write_text(JS_HEADER + "window.KIISE_DEADLINES = "
-                   + json.dumps(data, ensure_ascii=False, indent=2) + ";\n",
+                   + json.dumps(out, ensure_ascii=False, indent=2) + ";\n",
                    encoding="utf-8")
 
     html = INDEX.read_text(encoding="utf-8")
@@ -95,7 +125,8 @@ def main() -> None:
         INDEX.write_text(html2, encoding="utf-8")
 
     print(f"deadline window: {lo} .. {hi} — {len(items)} items "
-          f"({len({i['abbr'] for i in items})} conferences)")
+          f"({len({i['abbr'] for i in items})} conferences) + 기타 {len(misc)} items "
+          f"({len({i['abbr'] for i in misc})} conferences)")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,99 @@
+﻿번호,대분야,소분야,약칭,학회명,등급,공식사이트,회차,초록마감,논문마감,주기,비고
+2024-M-001,AI,ML,AAAI Workshops (DAI),AAAI Workshop on Deployable AI,기타,https://dai-workshop.github.io/,2026,,2025-10-24,,AAAI 워크숍
+2024-M-002,AI,ML,ICLR Workshops (ReALM-GEN),ICLR Workshop on Real-World Constrained and Preference-Aligned Flow and Diffusion-based Models,기타,https://realm-gen-workshop.github.io/,2026,,2026-02-01,,ICLR 워크숍
+2024-M-003,AI,ML,NeurIPS Workshops (SLM),NeurIPS Workshop (SLMW),기타,https://slmw2026.github.io/,2026,,2026-08-29,,NeurIPS 워크숍
+2024-M-004,AI,ML,AI4NextG,AI for Next Generation Wireless Workshop @ NeurIPS,기타,https://ai4nextg.github.io/,2025,,2025-08-29,,NeurIPS 워크숍
+2024-M-005,AI,ML,GraphML@ACML,GraphML Workshop @ Asian Conference on Machine Learning (ACML),기타,https://acml2026-graphml-workshop.github.io/,2026,,,,ACML 워크숍 · PMLR
+2024-M-006,AI,ML,KR (LAMAS&SR),LAMAS&SR Workshop @ Int'l Conference on Principles of Knowledge Representation and Reasoning (KR),기타,https://strategic-reasoning.github.io/,2026,,,,KR 워크숍
+2024-M-007,AI,ML,AIxIA,International Conference of the Italian Association for Artificial Intelligence (NL4AI Workshop),기타,https://aixia2026.unipg.it/,2026,,,,NL4AI 워크숍 포함
+2024-M-008,AI,ML,SSCI,IEEE Symposium Series on Computational Intelligence,기타,https://attend.ieee.org/,2027,,,,
+2024-M-009,AI,ML,MLSP,IEEE International Workshop on Machine Learning for Signal Processing,기타,https://mlsp26.ieeesps.org/,2026,,2026-04-30,,
+2024-M-010,AI,ML,ACM Trustworthy AI,ACM Conference on Trustworthy and Responsible AI and Computing Systems,기타,https://eigtrust.acm.org/,2026,,,,
+2024-M-011,AI,ML,AI Eng & Innovation,AI Engineering and Innovation Conference,기타,https://www.aiengineering-conference.org/,2026,,,,
+2024-M-012,AI,ML,ICCIML,International Conference on Computational Intelligence and Machine Learning,기타,https://ic-ciml.com/,2026,,,,
+2024-M-013,AI,ML,ICRMLAI,"International Conference on Robotics, Machine Learning and Artificial Intelligence",기타,https://sarc.net.in/,2026,,,,
+2024-M-014,AI,ML,ICSTAICE,"International Conference on Smart Technology, Artificial Intelligence and Computer Engineering",기타,https://iraj.in/,2025,,,,
+2024-M-015,AI,ML,ISCMI,International Conference on Soft Computing & Machine Intelligence,기타,https://iscmi.us/,2026,,,,13th (2026)
+2024-M-016,AI,ML,AIC,IEEE World Conference on Applied Intelligence and Computing,기타,https://scrs.in/,2026,,,,5th (2026)
+2024-M-017,AI,ML,ICICAI,IEEE International Conference on Intelligent Computing and Artificial Intelligence,기타,https://www.ggits.org/,2026,,,,
+2024-M-018,AI,ML,ICAICE,International Conference on Artificial Intelligence and Computer Engineering,기타,https://www.event-icaice.org/,2026,,,,
+2024-M-019,AI,ML,ICAIET,International Conference on Artificial Intelligence and Emerging Technologies,기타,https://www.icaiet.co.in/,2027,,,,
+2024-M-020,AI,ML,ICADCML,International Conference on Advances in Distributed Computing and Machine Learning,기타,https://www.icadcml.in/,2026,,,,
+2024-M-021,AI,ML,ICMLC,International Conference on Machine Learning and Computing,기타,https://www.icmlc.org/,2027,,,,19th (2027)
+2024-M-022,AI,NLP,ASRU,IEEE Automatic Speech Recognition and Understanding Workshop,기타,https://2025.ieeeasru.org/,2025,,2025-05-28,2,격년(홀수 해) 개최
+2024-M-023,AI,NLP,WMT,Conference on Machine Translation,기타,https://www2.statmt.org/,2025,,2025-08-14,,EMNLP 공동 개최
+2024-M-024,AI,NLP,ICON,International Conference on Natural Language Processing,기타,https://www.icon2026.org/,2026,,,,22nd (2026)
+2024-M-025,AI,NLP,NCMMSC,National Conference on Man-Machine Speech Communication,기타,https://www.ncmmsc.org.cn/,2026,,,,
+2024-M-026,AI,NLP,AIST,International Conference on Artificial Intelligence and Speech Technology,기타,https://aistconference.com/,2026,,,,8th (2026)
+2024-M-027,AI,CV,ICIP,IEEE International Conference on Image Processing,기타,https://2026.ieeeicip.org/,2026,,2026-01-28,,
+2024-M-028,AI,CV,3DV,International Conference on 3D Vision,기타,https://3dvconf.github.io/2027/,2026,,2025-08-18,,
+2024-M-029,AI,CV,ICCP,IEEE International Conference on Computational Photography,기타,https://iccp2026.iccp-conference.org/,2026,,,,
+2024-M-030,AI,CV,CVPR Workshops,CVPR Workshops,기타,https://sites.google.com/,2026,,2026-03-10,,CVPR 워크숍
+2024-M-031,AI,CV,CVPR Workshops (GRAIL),GRAIL Workshop @ CVPR,기타,https://grailworkshops.github.io/,2026,,,,CVPR 워크숍
+2024-M-032,AI,CV,ICCV Workshops,ICCV Workshops,기타,https://iccv.thecvf.com/,2025,,2025-07-01,2,ICCV 워크숍 · 격년(홀수 해)
+2024-M-033,AI,CV,ICVGIP,"Indian Conference on Computer Vision, Graphics and Image Processing",기타,https://icvgip.in/,2026,,,,
+2024-M-034,AI,CV,ICICML,"International Conference on Image Processing, Computer Vision and Machine Learning",기타,https://www.icicml.org/,2026,,,,5th (2026)
+2024-M-035,AI,Bio,AIHC,International Conference on AI in Healthcare,기타,https://aihc.sithyd.edu.in/,2027,,,,
+2024-M-036,AI,Robot,HRI,ACM/IEEE International Conference on Human-Robot Interaction,기타,https://humanrobotinteraction.org/,2026,,2025-10-01,,
+2024-M-037,AI,Robot,RAAI,"International Conference on Robotics, Automation, and Artificial Intelligence",기타,https://raai.net/,2026,,,,
+2024-M-038,CS,DM,ICDM Workshops (GNN-LLM-SYN),GNN-LLM-SYN Workshop @ IEEE International Conference on Data Mining,기타,https://icdm2026.neu.edu.cn/,2026,,,,ICDM 워크숍
+2024-M-039,CS,DM,KDD Workshops (epiDAMIK),epiDAMIK: Workshop on Data-driven Decision Making for Public and Population Health,기타,https://epidamik.github.io/,2026,,2026-05-25,,KDD 워크숍
+2024-M-040,CS,DM,CODS,ACM IKDD Conference on Data Science (CODS),기타,https://ikdd.acm.org/,2026,,,,
+2024-M-041,CS,DM,KDMiLe,"Symposium on Knowledge Discovery, Mining and Learning",기타,https://bracis.sbc.org.br/,2026,,,,BRACIS 공동 개최
+2024-M-042,CS,DM,ICDDS,"International Conference on Data, Decision and Systems",기타,https://ieeecsbangalore.org/,2026,,,,5th (2026)
+2024-M-043,CS,CGI,ICME,IEEE International Conference on Multimedia and Expo,기타,https://2026.ieeeicme.org/,2026,,2025-12-05,,
+2024-M-044,CS,CGI,HCII,International Conference on Human-Computer Interaction (HCI International),기타,https://2026.hci.international/,2026,,,,2027: https://2027.hci.international/
+2024-M-045,CS,CGI,AHFE,AHFE International Conference on Applied Human Factors and Ergonomics,기타,https://www.ahfe.org/,2027,,,,
+2024-M-046,CS,CGI,AHFE Hawaii,AHFE Hawaii International Conference,기타,https://www.hawaii.ahfe.org/,2026,,,,
+2024-M-047,CS,CGI,AIxVR,IEEE International Conference on Artificial Intelligence and eXtended and Virtual Reality,기타,https://aivr.science.uu.nl/,2027,,,,
+2024-M-048,CS,CGI,AIHCIR,"IEEE International Conference on AI, Human-Computer Interaction and Robotics",기타,https://www.aihcir.org/,2026,,,,5th (2026)
+2024-M-049,CS,CGI,ISM,IEEE International Symposium on Multimedia,기타,https://www.multimediacomputing.org/,2026,,,,28th (2026)
+2024-M-050,CS,CGI,UbiComp Workshops,UbiComp / ISWC Workshops and Tutorials,기타,https://reproduce-ubicomp.github.io/,2026,,,,UbiComp/ISWC 워크숍
+2024-M-051,CS,SE,APSEC,Asia-Pacific Software Engineering Conference,기타,https://conf.researchr.org/,2026,,2026-07-01,,
+2024-M-052,CS,SE,SAC,ACM/SIGAPP Symposium on Applied Computing,기타,https://www.sigapp.org/,2026,,2025-09-15,,
+2024-M-053,CS,SE,SETTA,"International Symposium on Dependable Software Engineering: Theories, Tools and Applications",기타,https://www.setta2026.sg/,2026,,,,
+2024-M-054,CS,SE,CIbSE,Ibero-American Conference on Software Engineering,기타,https://www.cibse.org/,2027,,,,공식 사이트 확인 필요
+2024-M-055,CS,SE,ICSIE,International Conference on Software and Information Engineering,기타,https://icsie.org/,2027,,,,15th (2027)
+2024-M-056,CS,SE,ICSTE,International Conference on Software Technology and Engineering,기타,https://www.icste.org/,2026,,,,16th (2026)
+2024-M-057,CS,SE,ICMSS,"International Conference on Management Engineering, Software Engineering and Service Sciences",기타,https://icmss.org/,2027,,,,11th (2027)
+2024-M-058,CS,SE,WSSE,World Symposium on Software Engineering,기타,https://www.wsse.org/,2026,,,,
+2024-M-059,CS,Sec,ICICS,International Conference on Information and Communications Security,기타,https://sulab-sever.u-aizu.ac.jp/,2026,,,,"28th (2026) · Fukui, Japan"
+2024-M-060,CS,Sec,LADC,Latin-American Symposium on Dependable and Secure Computing (Industrial Track),기타,https://ladc.sbc.org.br/,2026,,,,15th · Industrial Track
+2024-M-061,CS,OS,SBESC (SSV),IEEE SBESC Latin-American Workshop on Safe and Secure Vehicles,기타,https://sbesc.lisha.ufsc.br/,2026,,,,SBESC 워크숍
+2024-M-062,CS,Arch,ISSCC,IEEE International Solid-State Circuits Conference,기타,https://www.isscc.org/,2026,,2025-09-08,,
+2024-M-063,CS,Arch,ISED,International Conference on Intelligent Systems and Embedded Design,기타,https://cms.nitw.ac.in/,2026,,,,14th (2026) · NIT Warangal
+2024-M-064,CS,Arch,ICCE,IEEE International Conference on Consumer Electronics,기타,https://icce.org/,2026,,2025-09-08,,
+2024-M-065,CS,Arch,ICCE-Asia,IEEE/IEIE International Conference on Consumer Electronics-Asia,기타,https://icce-asia2026.org/,2026,,,,
+2024-M-066,CS,HPC,EduHiPC,Workshop on Education for High Performance Computing (EduHiPC),기타,https://cdercenter.org/,2026,,,,HiPC 워크숍
+2024-M-067,CS,Net,GLOBECOM,IEEE Global Communications Conference,기타,https://globecom2026.ieee-globecom.org/,2026,,2026-04-01,,
+2024-M-068,CS,Net,ICC,IEEE International Conference on Communications,기타,https://icc2027.ieee-icc.org/,2026,,2025-10-03,,
+2024-M-069,CS,Net,VTC-Spring,IEEE Vehicular Technology Conference (Spring),기타,https://events.vtsociety.org/,2026,,2025-11-03,,
+2024-M-070,CS,Net,CCNC,IEEE Consumer Communications & Networking Conference,기타,https://ccnc2027.ieee-ccnc.org/,2027,,,,
+2024-M-071,CS,Net,ICACT,International Conference on Advanced Communications Technology,기타,https://icact.org/,2026,,2025-10-31,,
+2024-M-072,CS,Net,ANTS,IEEE International Conference on Advanced Networks and Telecommunications Systems,기타,https://ants2026.ieee-ants.org/,2026,,,,
+2024-M-073,CS,Net,MobiCom Workshops (DTwin),DTwin Workshop @ ACM MobiCom,기타,https://zifanzhang.com/,2026,,,,MobiCom 워크숍
+2024-M-074,CS,Net,NCC,National Conference on Communications,기타,https://ece.iisc.ac.in/,2027,,,,
+2024-M-075,CS,Net,CommNet,International Conference on Advanced Communication Technologies and Networking,기타,https://www.commnet-conf.org/,2026,,,,9th (2026)
+2024-M-076,CS,Net,CIEES,"International Conference on Communications, Information, Electronic and Energy Systems",기타,https://ciees.eu/,2026,,,,7th (2026)
+2024-M-077,CS,Net,IC4,IEEE International Conference on Contemporary Computing and Communications,기타,https://ic4.co.in/,2026,,,,
+2024-M-078,CS,Net,IC4 (Medicaps),"International Conference (IC4), Medicaps University",기타,https://ic4.medicaps.ac.in/,2027,,,,3rd
+2024-M-079,CS,Net,IDCIoT,International Conference on Intelligent Data Communication Technologies and Internet of Things,기타,https://icoici.org/,2027,,,,
+2024-M-080,CS,Net,ICSCNA,International Conference on Sustainable Communication Networks and Application,기타,https://icoscn.com/,2026,,,,4th (2026)
+2024-M-081,CS,Net,ICICNIS,ICICNIS (정식 명칭 확인 필요),기타,https://icicnis.com/,2026,,,,
+2024-M-082,CS,Net,ICICSP,International Conference on Information Communication and Signal Processing,기타,https://icsp.org/,2026,,,,
+2024-M-083,CS,Net,NMITCON,"International Conference on Networks, Multimedia and Information Technology",기타,https://nitte.edu.in/,2026,,,,
+2024-M-084,CS,Net,ISACC,"International Conference on Intelligent Systems, Advanced Computing and Communication",기타,https://www.isacc.in/,2026,,,,4th (2026)
+2024-M-085,CS,SE,IC3,International Conference on Contemporary Computing,기타,https://www.ic3conf.net/,2026,,,,18th (2026)
+2024-M-086,CS,SE,ICICI,International Conference on Inventive Computing and Informatics,기타,https://icinci.com/,2026,,,,5th
+2024-M-087,CS,SE,ICETCS,International Conference on Emerging Technologies in Computer Science for Interdisciplinary Applications,기타,https://icetcs.bmsce.in/,2026,,,,2nd
+2024-M-088,CS,SE,ICSIC,International Computer Sciences and Informatics Conference,기타,https://icsic.aau.edu.jo/,2026,,,,6th
+2024-M-089,CS,SE,RAIT,International Conference on Recent Advances in Information Technology,기타,https://people.iitism.ac.in/~rait/,2026,,,,IIT (ISM) Dhanbad
+2024-M-090,CS,SE,CSBC,Congresso da Sociedade Brasileira de Computação,기타,https://www.sbc.org.br/,2026,,,,
+2024-M-091,CS,SE,ICFFTS,ICFFTS (정식 명칭 확인 필요),기타,https://icffts.com/,2025,,,,
+2024-M-092,CS,SE,ICONAECC,ICONAECC (정식 명칭 확인 필요),기타,https://iconaecc2026.aconf.org/,2026,,,,
+2024-M-093,CS,SE,ICE2CPT,ICE2CPT (정식 명칭 확인 필요),기타,https://www.ice2cpt.org/,2026,,,,
+2024-M-094,CS,SE,ISPACET,ISPACET (정식 명칭 확인 필요),기타,https://space.krct.ac.in/,2026,,,,
+2024-M-095,CS,SE,SoutheastCon,IEEE Region 3 SoutheastCon,기타,https://ieeesoutheastcon.org/,2027,,,,
+2024-M-096,CS,SE,INDICON,IEEE India Council International Conference,기타,https://www.indicon2026.com/,2026,,,,
+2024-M-097,CS,SE,INDISCON,IEEE India Council International Subsections Conference,기타,https://www.ieeeindiscon.org/,2026,,,,
+2024-M-098,CS,SE,CHANDICON,IEEE Chandigarh Subsection International Conference,기타,https://www.chandicon.org/,2026,,,,
