@@ -6,16 +6,8 @@
 // 실제 마감일은 반드시 각 학회 공식 홈페이지에서 확인해야 합니다.
 // abbr 은 docs/assets/data.js 의 약칭과 일치해야 캘린더 칩이 학회 정보와 연결됩니다.
 window.KIISE_DEADLINES = {
-  "updated": "2026-10-20",
+  "updated": "2026-10-25",
   "items": [
-    {
-      "abbr": "USENIX Security",
-      "edition": "2027",
-      "kind": "논문",
-      "date": "2026-08-25",
-      "note": "1차 라운드",
-      "status": "confirmed"
-    },
     {
       "abbr": "AI4NextG",
       "edition": "2026",
