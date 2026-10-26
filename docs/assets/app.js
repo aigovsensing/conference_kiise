@@ -791,6 +791,31 @@
   // and a data-target pointing at the id of the section it reveals.
   const sectionNavs = [];   // {syncVisibility} handles, refreshed by syncSectionNavs()
 
+  // Dashboard menu entries link to their own pages (major.html, grade.html …)
+  // generated from index.html by scripts/build_section_pages.py. A direct visit
+  // opens that generated page; inside the site the History API swaps the URL
+  // without reloading, since every page carries the same markup.
+  const pageOf = new Map();          // section id -> "major.html"
+  const sectionOfPage = new Map();   // "major"    -> section id
+  document.querySelectorAll(".section-nav a[data-target]").forEach((a) => {
+    const href = a.getAttribute("href") || "";
+    if (!/^[\w-]+\.html$/.test(href)) return;
+    pageOf.set(a.dataset.target, href);
+    sectionOfPage.set(href.replace(/\.html$/, ""), a.dataset.target);
+  });
+  // section addressed by the URL path (GitHub Pages also serves /major for major.html)
+  const pathSection = () => sectionOfPage.get(
+    decodeURIComponent(location.pathname.split("/").pop()).replace(/\.html$/, "")) || null;
+  const homeUrl = () => (location.protocol === "file:" ? "index.html" : "./");
+  const pageUrl = (section) => new URL(pageOf.get(section), location.href).href;
+  function setTitle(section) {
+    const link = pageOf.has(section) &&
+      document.querySelector(`.section-nav a[data-target="${window.CSS.escape(section)}"]`);
+    document.title = link
+      ? `${link.textContent.replace(/^[^\p{L}\p{N}]+/u, "").trim()} · ${T.docTitle}`
+      : T.docTitle;
+  }
+
   function initSectionNav(nav) {
     const btns = [...nav.querySelectorAll("[data-target]")];
     if (!btns.length) return;
@@ -820,7 +845,9 @@
     btns.forEach((b) => b.addEventListener("click", (event) => {
       event.preventDefault();
       const href = b.getAttribute("href");
-      if (href && location.hash !== href) history.pushState(null, "", href);
+      const url = href && new URL(href, location.href).href;
+      if (url && url !== location.href) history.pushState(null, "", url);
+      if (pageOf.has(b.dataset.target)) setTitle(b.dataset.target);
       scrollToTarget(b.dataset.target, event.isTrusted);
       setActive(b.dataset.target);
     }));
@@ -875,25 +902,44 @@
       if (!views[name]) name = "dashboard";
       Object.entries(views).forEach(([k, v]) => { v.hidden = k !== name; });
       tabs.forEach((b) => b.classList.toggle("active", b.dataset.view === name));
-      if (!keepSection) history.replaceState(null, "", "#" + name);
+      if (!keepSection) {
+        // a view URL always lives on the main page, even when coming from major.html …
+        history.replaceState(null, "", (pathSection() ? homeUrl() : "") + "#" + name);
+        setTitle(null);
+      }
     }
-    function openHash() {
+    // open whatever the URL points at: a section page (major.html), a #section,
+    // or a #view. Returns the section id, if any.
+    function route(initial = false) {
       const hash = location.hash.slice(1);
-      const sectionTarget = document.getElementById(hash);
+      let section = hash || pathSection() || (initial && document.documentElement.dataset.section) || null;
+      const sectionTarget = section && document.getElementById(section);
       const sectionView = sectionTarget && sectionTarget.closest('[id^="view-"]');
-      const section = sectionView ? hash : null;
-      const sectionViewName = sectionView ? sectionView.id.replace("view-", "") : null;
-      const view = section ? sectionViewName : (views[hash] ? hash : "dashboard");
+      if (!sectionView) section = null;
+      // legacy #major-card links → the section's own page URL
+      if (hash && section && pageOf.has(section)) history.replaceState(null, "", pageUrl(section));
+      const view = section ? sectionView.id.replace("view-", "") : (views[hash] ? hash : "dashboard");
       show(view, Boolean(section));
       if (section) {
         if (sectionTarget.tagName === "DETAILS") sectionTarget.open = true;
         sectionView.querySelectorAll(".section-nav [data-target]").forEach((link) => {
           link.classList.toggle("active", link.dataset.target === section);
         });
+        setTitle(section);
       }
+      return section;
     }
-    window.addEventListener("hashchange", openHash);
-    openHash();
+    window.addEventListener("hashchange", () => route());
+    // back/forward between section pages changes only the path: re-open and scroll
+    window.addEventListener("popstate", () => {
+      const section = route();
+      if (section) jumpToSection(section);
+    });
+    route(true);
+  }
+  function jumpToSection(id) {
+    const link = document.querySelector(`.section-nav [data-target="${window.CSS.escape(id)}"]`);
+    if (link) link.click();
   }
 
   /* ---------------- apply language to static markup ---------------- */
@@ -908,7 +954,6 @@
       };
     }
     if (T.static) {
-      document.title = T.docTitle;
       Object.entries(T.static).forEach(([sel, html]) => {
         document.querySelectorAll(sel).forEach((n) => { n.innerHTML = html; });
       });
@@ -1089,9 +1134,8 @@
   // Re-apply a direct section URL after dynamic charts/lists have established
   // their final heights; otherwise content inserted above can shift the target.
   window.setTimeout(() => {
-    const id = location.hash.slice(1);
-    const link = document.querySelector(`.section-nav [data-target="${window.CSS.escape(id)}"]`);
-    if (link) link.click();
+    const id = location.hash.slice(1) || pathSection() || document.documentElement.dataset.section;
+    if (id) jumpToSection(id);
   }, 150);
   initTheme();
 })();

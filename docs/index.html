@@ -37,14 +37,16 @@
     </nav>
 
     <div id="view-dashboard">
-    <!-- Quick-jump sub-navigation: jump straight to a dashboard section -->
+    <!-- Quick-jump sub-navigation: jump straight to a dashboard section.
+         Each entry has its own page URL (major.html …), generated from this file
+         by scripts/build_section_pages.py — re-run it after editing index.html. -->
     <nav class="section-nav" aria-label="대시보드 섹션 바로가기">
-      <a class="active" href="#major-card" data-target="major-card">📊 대분야별 등급 분포</a>
-      <a href="#grade-card" data-target="grade-card">🍩 등급 구성</a>
-      <a href="#sub-card" data-target="sub-card">📶 소분야별 학회 수</a>
-      <a href="#publication-card" data-target="publication-card">📚 연도별 논문 출판 현황</a>
-      <a href="#month-card" data-target="month-card">📅 월별 학회 현황</a>
-      <a href="#changes-card" data-target="changes-card">🔄 이전 대비 변동</a>
+      <a class="active" href="major.html" data-target="major-card">📊 대분야별 등급 분포</a>
+      <a href="grade.html" data-target="grade-card">🍩 등급 구성</a>
+      <a href="subfield.html" data-target="sub-card">📶 소분야별 학회 수</a>
+      <a href="publications.html" data-target="publication-card">📚 연도별 논문 출판 현황</a>
+      <a href="monthly.html" data-target="month-card">📅 월별 학회 현황</a>
+      <a href="changes.html" data-target="changes-card">🔄 이전 대비 변동</a>
     </nav>
 
     <!-- Summary tiles -->
@@ -303,6 +305,6 @@
   <script src="assets/korea.js?v=20260727"></script>
   <script src="assets/publications.js?v=20260821"></script>
   <script src="assets/publication-chart.js?v=20260821b"></script>
-  <script src="assets/app.js?v=20261021"></script>
+  <script src="assets/app.js?v=20261026"></script>
 </body>
 </html>

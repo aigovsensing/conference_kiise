@@ -82,6 +82,8 @@ S/A 등급 구성, 대분야(AI·CS)·소분야(16개)별 분포를 시각화하
 │   └── build_data.py                        # CSV → docs/assets/data.js 생성기
 ├── docs/                                     # GitHub Pages 배포 폴더
 │   ├── index.html                            # 대시보드 페이지
+│   ├── major.html · grade.html · subfield.html # 대시보드 섹션별 페이지 (자동 생성)
+│   ├── publications.html · monthly.html · changes.html
 │   ├── data/
 │   │   └── excellent_sw_conferences_2024.csv # 원본 사본(참고용)
 │   └── assets/
@@ -157,6 +159,26 @@ python3 scripts/build_data.py
 빌드 스크립트가 `data/excellent_sw_conferences_*.csv` 를 모두 자동 병합하고, 각 학회의
 연도는 `번호`(예: `2025-S-001`) 또는 파일명에서 추출합니다. 대시보드 상단 필터에
 **연도 선택**이 자동으로 나타납니다.
+
+## 🔗 섹션별 페이지 주소
+
+대시보드 상단 메뉴의 각 항목은 고유한 페이지 주소를 가집니다.
+
+| 메뉴 | 주소 |
+|---|---|
+| 📊 대분야별 등급 분포 | `major.html` |
+| 🍩 등급 구성 | `grade.html` |
+| 📶 소분야별 학회 수 | `subfield.html` |
+| 📚 연도별 논문 출판 현황 | `publications.html` |
+| 📅 월별 학회 현황 | `monthly.html` |
+| 🔄 이전 대비 변동 | `changes.html` |
+
+이 페이지들은 `docs/index.html` 에서 자동 생성되므로 직접 수정하지 말고,
+`index.html` 을 고친 뒤 아래 스크립트를 실행하세요. (기존 `#major-card` 형식 링크도 계속 동작합니다.)
+
+```bash
+python3 scripts/build_section_pages.py
+```
 
 ## 🌐 GitHub Pages 배포
 

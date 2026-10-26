@@ -8,6 +8,7 @@ covers roughly [today - 60 days, today + 400 days], then rewrites:
   - data/deadlines.json        (rolled canonical data)
   - docs/assets/deadlines.js   (asset consumed by the dashboard)
   - docs/index.html            (cache-busting ?v= stamp for deadlines.js)
+  - docs/<section>.html        (section pages regenerated from index.html)
 
 Deadlines of the 기타(misc) conferences live in the 초록마감/논문마감 columns
 of data/misc_sw_conferences_*.csv. They are projected the same way and
@@ -27,6 +28,8 @@ import datetime
 import json
 import pathlib
 import re
+
+import build_section_pages
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SRC = ROOT / "data" / "deadlines.json"
@@ -126,6 +129,7 @@ def main() -> None:
                    f"deadlines.js?v={stamp}", html)
     if html2 != html:
         INDEX.write_text(html2, encoding="utf-8")
+    build_section_pages.main()   # keep major.html … in sync with index.html
 
     print(f"deadline window: {lo} .. {hi} — {len(items)} items "
           f"({len({i['abbr'] for i in items})} conferences) + 기타 {len(misc)} items "
