@@ -177,7 +177,7 @@ window.KIISE_I18N = {
       ".deleted-note summary": 'Conferences <strong>removed</strong> from the <span id="deleted-year">2024</span> list: <span id="deleted-count"></span>',
       ".deleted-note thead tr": "<th>Field</th><th>Subfield</th><th>Abbr</th><th>Conference</th><th>Prev. grade</th>",
       "#f-src": 'Data source: KIISE <a href="https://www.kiise.or.kr/academy/main/getContent.fa?content_no=86&MENU_ID=130500" target="_blank" rel="noopener">Excellent International Conference List</a> · <code>excellent_sw_conferences_{2014,2016,2018,2020,2024}.csv</code> · Other (reference): <code>misc_sw_conferences_2024.csv</code>',
-      "#f-note": 'This dashboard is unofficial and for reference only. See official KIISE materials for the authoritative list. Source: <a href="https://github.com/leemgs/conference_kiise" target="_blank" rel="noopener">github.com/leemgs/conference_kiise</a>',
+      "#f-note": 'This dashboard is unofficial and for reference only. See official KIISE materials for the authoritative list.',
       ".search-panel-eyebrow": "Web Search",
     },
   },
