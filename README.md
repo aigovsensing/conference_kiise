@@ -82,8 +82,7 @@ S/A 등급 구성, 대분야(AI·CS)·소분야(16개)별 분포를 시각화하
 │   └── build_data.py                        # CSV → docs/assets/data.js 생성기
 ├── docs/                                     # GitHub Pages 배포 폴더
 │   ├── index.html                            # 대시보드 페이지
-│   ├── major.html · grade.html · subfield.html # 대시보드 섹션별 페이지 (자동 생성)
-│   ├── publications.html · monthly.html · changes.html
+│   ├── dashboard.html · korea.html · …       # 메뉴별 페이지 16개 (index.html 에서 자동 생성)
 │   ├── data/
 │   │   └── excellent_sw_conferences_2024.csv # 원본 사본(참고용)
 │   └── assets/
@@ -160,21 +159,19 @@ python3 scripts/build_data.py
 연도는 `번호`(예: `2025-S-001`) 또는 파일명에서 추출합니다. 대시보드 상단 필터에
 **연도 선택**이 자동으로 나타납니다.
 
-## 🔗 섹션별 페이지 주소
+## 🔗 메뉴별 페이지 주소
 
-대시보드 상단 메뉴의 각 항목은 고유한 페이지 주소를 가집니다.
+상단 메인 메뉴와 각 화면의 서브 메뉴는 모두 고유한 페이지 주소를 가집니다.
 
-| 메뉴 | 주소 |
-|---|---|
-| 📊 대분야별 등급 분포 | `major.html` |
-| 🍩 등급 구성 | `grade.html` |
-| 📶 소분야별 학회 수 | `subfield.html` |
-| 📚 연도별 논문 출판 현황 | `publications.html` |
-| 📅 월별 학회 현황 | `monthly.html` |
-| 🔄 이전 대비 변동 | `changes.html` |
+| 메인 메뉴 | 주소 | 서브 메뉴 → 주소 |
+|---|---|---|
+| 📊 대시보드 | `dashboard.html` | 📊 대분야별 등급 분포 `major.html` · 🍩 등급 구성 `grade.html` · 📶 소분야별 학회 수 `subfield.html` · 📚 연도별 논문 출판 현황 `publications.html` · 📅 월별 학회 현황 `monthly.html` · 🔄 이전 대비 변동 `changes.html` |
+| 🌏 개최지별(한국/일본) | `korea.html` | 🇰🇷 한국 개최 학회 현황 `hosted-korea.html` · 🇯🇵 일본 개최 학회 현황 `hosted-japan.html` |
+| 📅 달력 | `calendar.html` | 📅 논문 제출 마감 캘린더 `deadlines.html` · ⏳ 다가오는 마감 `upcoming.html` |
+| 📋 목록 | `list.html` | 📋 학회 목록 `conferences.html` · 🗑️ 제외(삭제)된 학회 `removed.html` |
 
 이 페이지들은 `docs/index.html` 에서 자동 생성되므로 직접 수정하지 말고,
-`index.html` 을 고친 뒤 아래 스크립트를 실행하세요. (기존 `#major-card` 형식 링크도 계속 동작합니다.)
+`index.html` 을 고친 뒤 아래 스크립트를 실행하세요. (기존 `#korea`, `#major-card` 형식 링크도 새 주소로 자동 전환됩니다.)
 
 ```bash
 python3 scripts/build_section_pages.py

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<!-- 자동 생성 파일 — 직접 수정하지 마세요. docs/index.html 을 수정한 뒤
+     python3 scripts/build_section_pages.py 를 실행하면 다시 만들어집니다. -->
+<html lang="ko" data-section="deadline-card">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="KIISE 우수 SW 국제학술대회 목록(2014·2016·2018·2020·2024) 대시보드 — S/A 등급, 대분야·소분야별 분포와 검색">
+  <title>논문 제출 마감 캘린더 · KIISE 우수 SW 국제학술대회 대시보드</title>
+  <link rel="canonical" href="https://leemgs.github.io/conference_kiise/deadlines.html">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🎓%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="assets/style.css?v=20261021">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <div class="brand">
+        <a class="brand-mark" href="https://leemgs.github.io/conference_kiise/" title="대시보드 홈으로" aria-label="대시보드 홈으로">🎓</a>
+        <div>
+          <h1 id="site-title">KIISE 우수 SW 국제학술대회 대시보드</h1>
+          <p class="tagline">한국정보과학회(KIISE) 선정 · <strong id="tag-year">2024년</strong> 우수 국제학술대회 목록 — <span id="tag-count">216</span>개 학회<span id="tag-misc"></span> <span class="muted">(연도 선택 가능)</span></p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a id="kiise-link" class="btn ghost" href="https://www.kiise.or.kr/academy/main/getContent.fa?content_no=86&MENU_ID=130500" target="_blank" rel="noopener">KIISE 공식 안내 ↗</a>
+        <button id="lang-toggle" class="btn ghost" title="Language / 언어">EN</button>
+        <button id="theme-toggle" class="btn ghost icon" title="라이트/다크 전환" aria-label="테마 전환">🌓</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- View menu. Every tab and every section-nav entry below has its own page
+         URL (dashboard.html, major.html …), generated from this file by
+         scripts/build_section_pages.py — re-run it after editing index.html. -->
+    <nav class="view-tabs" aria-label="화면 선택">
+      <a href="dashboard.html" data-view="dashboard">📊 대시보드</a>
+      <a href="korea.html" data-view="korea">🌏 개최지별(한국/일본)</a>
+      <a href="calendar.html" data-view="calendar" class="active">📅 달력</a>
+      <a href="list.html" data-view="list">📋 목록</a>
+    </nav>
+
+    <div id="view-dashboard" hidden>
+    <!-- Quick-jump sub-navigation: jump straight to a dashboard section -->
+    <nav class="section-nav" aria-label="대시보드 섹션 바로가기">
+      <a class="active" href="major.html" data-target="major-card">📊 대분야별 등급 분포</a>
+      <a href="grade.html" data-target="grade-card">🍩 등급 구성</a>
+      <a href="subfield.html" data-target="sub-card">📶 소분야별 학회 수</a>
+      <a href="publications.html" data-target="publication-card">📚 연도별 논문 출판 현황</a>
+      <a href="monthly.html" data-target="month-card">📅 월별 학회 현황</a>
+      <a href="changes.html" data-target="changes-card">🔄 이전 대비 변동</a>
+    </nav>
+
+    <!-- Summary tiles -->
+    <section class="tiles" id="tiles" aria-label="요약 통계"></section>
+
+    <!-- Charts -->
+    <section class="grid-2">
+      <article class="card" id="major-card">
+        <div class="card-head">
+          <h2 id="h-major-dist">대분야별 등급 분포</h2>
+          <p id="s-major-dist" class="card-sub">AI · CS 두 대분야를 S/A/기타 등급으로 나눈 학회 수</p>
+        </div>
+        <div id="chart-major" class="chart-major"></div>
+        <div class="legend" id="legend-grade"></div>
+      </article>
+
+      <article class="card" id="grade-card">
+        <div class="card-head">
+          <h2 id="h-grade-comp">등급 구성</h2>
+          <p id="s-grade-comp" class="card-sub">S(최우수) · A(우수) · 기타(KIISE 비지정, 참고용) 비율</p>
+        </div>
+        <div id="chart-grade" class="chart-donut"></div>
+      </article>
+    </section>
+
+    <section class="card" id="sub-card">
+      <div class="card-head">
+        <h2 id="h-sub-count">소분야별 학회 수</h2>
+        <p id="s-sub-count" class="card-sub">16개 소분야 · 대분야(AI/CS)별 색상 구분 · 학회 수 내림차순</p>
+      </div>
+      <div id="chart-sub" class="chart-bars"></div>
+      <div class="legend" id="legend-major"></div>
+    </section>
+
+    <!-- Publication trend dashboard (DBLP conference-stream record counts) -->
+    <section class="card publication-card" id="publication-card">
+      <div class="publication-heading">
+        <div>
+          <h2>연도별 학회 논문 출판 현황</h2>
+          <p class="card-sub">학회별 출판·등재 논문 수 비교 · 분야를 선택하면 요약 통계는 해당 분야로 좁혀지고, 히트맵과 상위 10개 순위는 전체 분야 비교 맥락을 유지하며 선택 분야를 강조합니다.</p>
+        </div>
+        <div class="publication-filters" aria-label="논문 출판 현황 필터">
+          <label>연도 <select id="publication-year"></select></label>
+          <label>연구 분야 강조 <select id="publication-field"></select></label>
+        </div>
+      </div>
+      <div class="publication-notice" id="publication-source" role="note"></div>
+      <div class="publication-stats" id="publication-stats" aria-label="논문 출판 요약"></div>
+      <div class="publication-grid">
+        <section class="publication-panel" aria-labelledby="publication-heat-title">
+          <h3 id="publication-heat-title">학회별 연도 추이</h3>
+          <div id="publication-heatmap" class="publication-heatmap"></div>
+          <div class="heat-legend"><span>적음</span><i></i><span>많음</span></div>
+        </section>
+        <section class="publication-panel" aria-labelledby="publication-rank-title">
+          <h3 id="publication-rank-title"></h3>
+          <div id="publication-bars" class="publication-bars"></div>
+        </section>
+      </div>
+    </section>
+
+    <!-- Monthly deadline column chart -->
+    <section class="card" id="month-card">
+      <div class="card-head">
+        <h2 id="h-month">월별 학회 현황</h2>
+        <p id="s-month" class="card-sub">향후 12개월간 KIISE 지정(S/A) 학회의 논문·초록 마감 건수 (막대 클릭 시 상세)</p>
+      </div>
+      <div id="month-chart" class="cc"></div>
+      <div class="legend" id="legend-month"></div>
+      <h3 id="month-detail-heading" class="month-detail-heading"></h3>
+      <div id="month-detail" class="month-detail"></div>
+    </section>
+
+    <!-- Year-over-year changes -->
+    <section class="card" id="changes-card">
+      <div class="card-head">
+        <h2 id="h-changes">이전 대비 변동</h2>
+        <p id="s-changes" class="card-sub"><span id="changes-sub"></span> · 직전 조사 연도와 비교한 신규·삭제 학회</p>
+      </div>
+      <div class="changes-grid">
+        <div class="changes-col">
+          <h3 class="changes-title new">🟢 신규 <span id="new-count" class="changes-badge"></span></h3>
+          <ul id="new-list" class="changes-list"></ul>
+        </div>
+        <div class="changes-col">
+          <h3 class="changes-title del">🔴 삭제 <span id="del-count" class="changes-badge"></span></h3>
+          <ul id="del-list" class="changes-list"></ul>
+        </div>
+      </div>
+    </section>
+
+    </div><!-- /view-dashboard -->
+
+    <div id="view-korea" hidden>
+    <!-- Quick-jump sub-navigation: jump straight to a country section -->
+    <nav class="section-nav" aria-label="개최지 섹션 바로가기">
+      <a class="active" href="hosted-korea.html" data-target="kr-country-KR">🇰🇷 한국 개최 학회 현황</a>
+      <a href="hosted-japan.html" data-target="kr-country-JP">🇯🇵 일본 개최 학회 현황</a>
+    </nav>
+
+    <!-- Conferences hosted in Korea -->
+    <section class="card" id="korea-card">
+      <div class="card-head">
+        <h2 id="h-korea">🌏 개최지별(한국·일본) 학회 현황</h2>
+        <p id="s-korea" class="card-sub">개최지가 <strong>한국 또는 일본</strong>인 탑티어 국제학술대회 정리입니다. 저널은(Journal) 발표 절차가 없지만 학회는(Conference) 발표가 필요합니다. 일본은 한국에서 비행기로 약 2시간 거리라 가깝기 때문에, 국내·근거리 학회에 논문을 제출하면 출장비와 이동 부담을 줄일 수 있습니다. 일정과 마감일은 반드시 공식 홈페이지에서 확인하세요.</p>
+      </div>
+      <div class="kr-special-note" id="korea-special-note"></div>
+      <div id="korea-body"></div>
+      <p id="korea-empty" class="empty" hidden>현재 발표된 한국·일본 개최 학회가 없습니다.</p>
+    </section>
+    </div><!-- /view-korea -->
+
+    <div id="view-calendar">
+    <!-- Quick-jump sub-navigation: jump straight to a calendar section -->
+    <nav class="section-nav" aria-label="캘린더 섹션 바로가기">
+      <a class="active" href="deadlines.html" data-target="deadline-card">📅 논문 제출 마감 캘린더</a>
+      <a href="upcoming.html" data-target="upcoming-card">⏳ 다가오는 마감</a>
+    </nav>
+
+    <!-- Paper submission deadline calendar -->
+    <section class="card" id="deadline-card">
+      <div class="card-head">
+        <h2 id="h-deadline">논문 제출 마감 캘린더</h2>
+        <p id="s-deadline" class="card-sub">KIISE 최우수(S)·우수(A) 학회와 기타(참고용) 학회의 초록·논문 마감 일정 — 직전 연도 일정 기반 <strong>예상일</strong>이므로 반드시 공식 홈페이지에서 확인하세요. 기타 학회는 회색 점선 칩으로 표시됩니다.</p>
+      </div>
+      <div class="cal-toolbar">
+        <button id="cal-prev" class="btn ghost icon" title="이전 달" aria-label="이전 달">‹</button>
+        <h3 id="cal-title" class="cal-title" aria-live="polite"></h3>
+        <button id="cal-next" class="btn ghost icon" title="다음 달" aria-label="다음 달">›</button>
+        <button id="cal-today" class="btn ghost">오늘</button>
+        <div class="filter-group cal-filter" id="cal-filter" role="group" aria-label="학회 분류 필터"></div>
+      </div>
+      <div class="cal-dow" aria-hidden="true">
+        <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
+      </div>
+      <div id="cal-grid" class="cal-grid"></div>
+    </section>
+
+    <!-- Upcoming deadlines -->
+    <section class="card" id="upcoming-card">
+      <div class="card-head">
+        <h2 id="h-upcoming">다가오는 마감</h2>
+        <p id="s-upcoming" class="card-sub">오늘 이후 예정된 초록·논문 마감 (S · A · 기타) — 직전 연도 일정 기반 <strong>예상일</strong></p>
+      </div>
+      <ol id="upcoming-list" class="upcoming-list"></ol>
+      <div class="upcoming-more-wrap">
+        <button id="upcoming-more" class="btn ghost" hidden></button>
+      </div>
+    </section>
+    </div><!-- /view-calendar -->
+
+    <div id="view-list" hidden>
+    <!-- Quick-jump sub-navigation: jump straight to a list section -->
+    <nav class="section-nav" aria-label="목록 섹션 바로가기">
+      <a class="active" href="conferences.html" data-target="list-card">📋 학회 목록</a>
+      <a href="removed.html" data-target="deleted-card">🗑️ 제외(삭제)된 학회</a>
+    </nav>
+
+    <!-- Table -->
+    <section class="card" id="list-card">
+      <div class="card-head table-head">
+        <div>
+          <h2 id="h-table">학회 목록</h2>
+          <p id="s-table" class="card-sub"><span id="table-count">216</span>개 학회 · 약칭 또는 학회명으로 검색</p>
+        </div>
+      </div>
+
+      <div class="filters">
+        <select id="filter-year" aria-label="연도 필터"></select>
+        <span id="year-summary" class="year-summary" aria-live="polite"></span>
+        <input type="search" id="search" placeholder="🔍 약칭·학회명 검색 (예: CVPR, Security…)" autocomplete="off">
+        <div class="filter-group" id="filter-major" role="group" aria-label="대분야 필터"></div>
+        <div class="filter-group" id="filter-grade" role="group" aria-label="등급 필터"></div>
+        <select id="filter-sub" aria-label="소분야 필터"></select>
+        <label class="page-size"><span id="pp-before">페이지당</span>
+          <select id="page-size" aria-label="페이지당 학회 수">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15" selected>15</option>
+            <option value="30">30</option>
+            <option value="50">50</option>
+            <option value="70">70</option>
+            <option value="100">100</option>
+          </select>
+          <span id="pp-after">개</span>
+        </label>
+      </div>
+
+      <div class="table-scroll">
+        <table id="conf-table">
+          <thead>
+            <tr>
+              <th data-sort="no">번호</th>
+              <th data-sort="major">대분야</th>
+              <th data-sort="sub">소분야</th>
+              <th data-sort="abbr">약칭</th>
+              <th data-sort="name">학회명</th>
+              <th data-sort="grade">등급</th>
+              <th data-sort="note">비고</th>
+            </tr>
+          </thead>
+          <tbody id="conf-tbody"></tbody>
+        </table>
+        <p id="empty-msg" class="empty" hidden>조건에 맞는 학회가 없습니다.</p>
+      </div>
+
+      <nav class="pagination" id="pagination" aria-label="페이지 이동"></nav>
+    </section>
+
+    <details class="card deleted-note" id="deleted-card">
+      <summary><span id="deleted-year">2024</span>년 목록에서 <strong>제외(삭제)</strong>된 학회 <span id="deleted-count"></span>개</summary>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>대분야</th><th>소분야</th><th>약칭</th><th>학회명</th><th>이전 등급</th></tr></thead>
+          <tbody id="deleted-tbody"></tbody>
+        </table>
+      </div>
+    </details>
+    </div><!-- /view-list -->
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p id="f-src">데이터 출처: 한국정보과학회(KIISE) <a href="https://www.kiise.or.kr/academy/main/getContent.fa?content_no=86&MENU_ID=130500" target="_blank" rel="noopener">우수 국제학술대회 목록 안내</a> · <code>excellent_sw_conferences_{2014,2016,2018,2020,2024}.csv</code> · 기타(참고용): <code>misc_sw_conferences_2024.csv</code></p>
+      <p id="f-note" class="muted">본 대시보드는 비공식 참고용입니다. 등급·목록의 최종 기준은 KIISE 공식 자료를 확인하세요.</p>
+    </div>
+  </footer>
+
+  <div id="tooltip" class="tooltip" role="status" aria-live="polite" hidden></div>
+
+  <!-- 학회명 클릭 시 열리는 구글 검색 사이드 패널 -->
+  <div id="search-backdrop" class="search-backdrop" hidden></div>
+  <aside id="search-panel" class="search-panel" role="dialog" aria-modal="true"
+         aria-labelledby="search-panel-title" hidden>
+    <header class="search-panel-head">
+      <div class="search-panel-titles">
+        <p class="search-panel-eyebrow">웹 검색</p>
+        <h2 id="search-panel-title" class="search-panel-title"></h2>
+      </div>
+      <div class="search-panel-actions">
+        <a id="search-panel-open" class="btn ghost icon" href="#" target="_blank"
+           rel="noopener" title="Google에서 새 탭으로 열기" aria-label="Google에서 새 탭으로 열기">↗</a>
+        <button id="search-panel-close" class="btn ghost icon" title="닫기"
+                aria-label="패널 닫기">✕</button>
+      </div>
+    </header>
+    <div class="search-panel-body">
+      <iframe id="search-frame" title="웹 검색 결과" loading="lazy"
+              referrerpolicy="no-referrer"></iframe>
+    </div>
+  </aside>
+
+  <script src="assets/data.js?v=20261021"></script>
+  <script src="assets/i18n.js?v=20261026"></script>
+  <script src="assets/deadlines.js?v=20261025"></script>
+  <script src="assets/korea.js?v=20260727"></script>
+  <script src="assets/publications.js?v=20260821"></script>
+  <script src="assets/publication-chart.js?v=20260821b"></script>
+  <script src="assets/app.js?v=20261026b"></script>
+</body>
+</html>

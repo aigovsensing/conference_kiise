@@ -791,26 +791,31 @@
   // and a data-target pointing at the id of the section it reveals.
   const sectionNavs = [];   // {syncVisibility} handles, refreshed by syncSectionNavs()
 
-  // Dashboard menu entries link to their own pages (major.html, grade.html …)
-  // generated from index.html by scripts/build_section_pages.py. A direct visit
-  // opens that generated page; inside the site the History API swaps the URL
-  // without reloading, since every page carries the same markup.
-  const pageOf = new Map();          // section id -> "major.html"
-  const sectionOfPage = new Map();   // "major"    -> section id
-  document.querySelectorAll(".section-nav a[data-target]").forEach((a) => {
+  // Every main menu tab (dashboard.html, korea.html …) and every sub-menu entry
+  // (major.html, upcoming.html …) has its own page, generated from index.html by
+  // scripts/build_section_pages.py. A direct visit opens that generated page;
+  // inside the site the History API swaps the URL without reloading, since every
+  // page carries the same markup.
+  const PAGE_RE = /^[\w-]+\.html$/;
+  const pageOf = new Map();          // section id or view name -> "major.html"
+  const targetOfPage = new Map();    // "major" -> {section: "major-card"} | {view: "korea"}
+  document.querySelectorAll(".section-nav a[data-target], .view-tabs a[data-view]").forEach((a) => {
     const href = a.getAttribute("href") || "";
-    if (!/^[\w-]+\.html$/.test(href)) return;
-    pageOf.set(a.dataset.target, href);
-    sectionOfPage.set(href.replace(/\.html$/, ""), a.dataset.target);
+    if (!PAGE_RE.test(href)) return;
+    const key = a.dataset.target || a.dataset.view;
+    pageOf.set(key, href);
+    targetOfPage.set(href.replace(/\.html$/, ""),
+      a.dataset.target ? { section: key } : { view: key });
   });
-  // section addressed by the URL path (GitHub Pages also serves /major for major.html)
-  const pathSection = () => sectionOfPage.get(
-    decodeURIComponent(location.pathname.split("/").pop()).replace(/\.html$/, "")) || null;
-  const homeUrl = () => (location.protocol === "file:" ? "index.html" : "./");
-  const pageUrl = (section) => new URL(pageOf.get(section), location.href).href;
-  function setTitle(section) {
-    const link = pageOf.has(section) &&
-      document.querySelector(`.section-nav a[data-target="${window.CSS.escape(section)}"]`);
+  // target addressed by the URL path (GitHub Pages also serves /major for major.html)
+  const pathTarget = () => targetOfPage.get(
+    decodeURIComponent(location.pathname.split("/").pop()).replace(/\.html$/, "")) || {};
+  const pageUrl = (key) => new URL(pageOf.get(key), location.href).href;
+  // "<menu label> · <site title>" for a page URL, the bare site title for index.html
+  function setTitle(key) {
+    const sel = `.section-nav a[data-target="${window.CSS.escape(key || "")}"], ` +
+                `.view-tabs a[data-view="${window.CSS.escape(key || "")}"]`;
+    const link = key && pageOf.has(key) && document.querySelector(sel);
     document.title = link
       ? `${link.textContent.replace(/^[^\p{L}\p{N}]+/u, "").trim()} · ${T.docTitle}`
       : T.docTitle;
@@ -898,42 +903,52 @@
       calendar: $("#view-calendar"),
       list: $("#view-list"),
     };
-    function show(name, keepSection = false) {
+    function show(name) {
       if (!views[name]) name = "dashboard";
       Object.entries(views).forEach(([k, v]) => { v.hidden = k !== name; });
       tabs.forEach((b) => b.classList.toggle("active", b.dataset.view === name));
-      if (!keepSection) {
-        // a view URL always lives on the main page, even when coming from major.html …
-        history.replaceState(null, "", (pathSection() ? homeUrl() : "") + "#" + name);
-        setTitle(null);
-      }
     }
-    // open whatever the URL points at: a section page (major.html), a #section,
-    // or a #view. Returns the section id, if any.
+    // open whatever the URL points at: a sub-menu page (major.html), a main menu
+    // page (korea.html), or a legacy #section / #view hash, which is rewritten to
+    // its page URL. Returns the section id, if any.
     function route(initial = false) {
       const hash = location.hash.slice(1);
-      let section = hash || pathSection() || (initial && document.documentElement.dataset.section) || null;
+      let { section, view } = hash
+        ? (document.getElementById(hash) ? { section: hash } : { view: hash })
+        : pathTarget();
+      if (!section && !view && initial) {
+        ({ section, view } = document.documentElement.dataset);
+      }
       const sectionTarget = section && document.getElementById(section);
       const sectionView = sectionTarget && sectionTarget.closest('[id^="view-"]');
       if (!sectionView) section = null;
-      // legacy #major-card links → the section's own page URL
-      if (hash && section && pageOf.has(section)) history.replaceState(null, "", pageUrl(section));
-      const view = section ? sectionView.id.replace("view-", "") : (views[hash] ? hash : "dashboard");
-      show(view, Boolean(section));
+      if (!views[view]) view = null;
+      const key = section || view;
+      if (hash && pageOf.has(key)) history.replaceState(null, "", pageUrl(key));
+      show(section ? sectionView.id.replace("view-", "") : view || "dashboard");
       if (section) {
         if (sectionTarget.tagName === "DETAILS") sectionTarget.open = true;
         sectionView.querySelectorAll(".section-nav [data-target]").forEach((link) => {
           link.classList.toggle("active", link.dataset.target === section);
         });
-        setTitle(section);
       }
+      setTitle(key);
       return section;
     }
+    tabs.forEach((tab) => tab.addEventListener("click", (event) => {
+      event.preventDefault();
+      const url = new URL(tab.getAttribute("href"), location.href).href;
+      if (url !== location.href) history.pushState(null, "", url);
+      route();
+      window.scrollTo(0, 0);
+    }));
     window.addEventListener("hashchange", () => route());
-    // back/forward between section pages changes only the path: re-open and scroll
+    // back/forward between pages changes only the path: re-open and scroll.
+    // Scrolling is ours — the browser's restore would fight the view switch.
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
     window.addEventListener("popstate", () => {
       const section = route();
-      if (section) jumpToSection(section);
+      if (section) jumpToSection(section); else window.scrollTo(0, 0);
     });
     route(true);
   }
@@ -1134,7 +1149,7 @@
   // Re-apply a direct section URL after dynamic charts/lists have established
   // their final heights; otherwise content inserted above can shift the target.
   window.setTimeout(() => {
-    const id = location.hash.slice(1) || pathSection() || document.documentElement.dataset.section;
+    const id = location.hash.slice(1) || pathTarget().section || document.documentElement.dataset.section;
     if (id) jumpToSection(id);
   }, 150);
   initTheme();
