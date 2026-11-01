@@ -1,14 +1,6 @@
 {
-  "updated": "2026-10-25",
+  "updated": "2026-11-01",
   "items": [
-    {
-      "abbr": "VLDB",
-      "edition": "2027",
-      "kind": "논문",
-      "date": "2026-09-01",
-      "note": "롤링(매월 1일)",
-      "status": "confirmed"
-    },
     {
       "abbr": "MobiCom",
       "edition": "2027",
@@ -1038,6 +1030,25 @@
       "edition": "2028",
       "kind": "논문",
       "date": "2027-11-20"
+    },
+    {
+      "abbr": "MobiSys",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-12-01"
+    },
+    {
+      "abbr": "USENIX OSDI",
+      "edition": "2028",
+      "kind": "초록",
+      "date": "2027-12-01"
+    },
+    {
+      "abbr": "VLDB",
+      "edition": "2028",
+      "kind": "논문",
+      "date": "2027-12-01",
+      "note": "롤링(매월 1일)"
     }
   ]
 }
