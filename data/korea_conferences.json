@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-01",
+  "updated": "2026-11-01",
   "specialWatch": [
     "ICML",
     "ICLR",
@@ -16,32 +16,6 @@
     "INTERSPEECH"
   ],
   "items": [
-    {
-      "abbr": "KDD",
-      "edition": "2026",
-      "year": 2026,
-      "country": "KR",
-      "name": "ACM SIGKDD Conference on Knowledge Discovery and Data Mining",
-      "city": "제주",
-      "cityEn": "Jeju",
-      "venue": "ICC Jeju",
-      "start": "2026-08-09",
-      "end": "2026-08-13",
-      "deadlines": [
-        {
-          "kind": "논문",
-          "date": "2025-08-08",
-          "note": "1차 라운드"
-        },
-        {
-          "kind": "논문",
-          "date": "2026-02-08",
-          "note": "2차 라운드"
-        }
-      ],
-      "site": "https://kdd2026.kdd.org/",
-      "confirmed": true
-    },
     {
       "abbr": "NDSS",
       "edition": "2027",
@@ -168,6 +142,32 @@
         }
       ],
       "site": "https://icml.cc/",
+      "confirmed": true
+    },
+    {
+      "abbr": "KDD",
+      "edition": "2026",
+      "year": 2026,
+      "country": "KR",
+      "name": "ACM SIGKDD Conference on Knowledge Discovery and Data Mining",
+      "city": "제주",
+      "cityEn": "Jeju",
+      "venue": "ICC Jeju",
+      "start": "2026-08-09",
+      "end": "2026-08-13",
+      "deadlines": [
+        {
+          "kind": "논문",
+          "date": "2025-08-08",
+          "note": "1차 라운드"
+        },
+        {
+          "kind": "논문",
+          "date": "2026-02-08",
+          "note": "2차 라운드"
+        }
+      ],
+      "site": "https://kdd2026.kdd.org/",
       "confirmed": true
     }
   ]
