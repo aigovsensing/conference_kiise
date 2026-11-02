@@ -1,0 +1,32 @@
+{
+  "_comment": "다가오는 마감 이메일 발송 설정 — 웹페이지 '📧 이메일 발송관리' 메뉴에서 편집·커밋할 수 있습니다. 비밀번호(Gmail 앱 비밀번호)는 이 파일에 넣지 말고 저장소 Secret GMAIL_APP_PASSWORD 로 등록하세요. receiver의 이메일 주소는 회사 이메일의 경우에 회사 방화벽에서 이메일의 수신자체를 막거나, 스팸함으로 분류되는 경우가 많습니다.",
+  "enabled": true,
+  "smtp_host": "smtp.gmail.com",
+  "smtp_port": 587,
+  "smtp_user": "leemgs@gmail.com",
+  "sender": "leemgs@gmail.com",
+  "sender_name": "KIISE 학회 마감 알림",
+  "schedule": {
+    "timezone": "Asia/Seoul",
+    "days": [
+      "MON"
+    ],
+    "time": "07:00"
+  },
+  "dday": 7,
+  "categories": [
+    "S",
+    "A",
+    "M"
+  ],
+  "send_if_empty": true,
+  "page_url": "https://aigovsensing.github.io/conference_kiise/upcoming.html",
+  "receivers": [
+    {
+      "email": "leemgs@gmail.com",
+      "name": "",
+      "dday": null,
+      "enabled": true
+    }
+  ]
+}

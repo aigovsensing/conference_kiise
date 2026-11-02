@@ -894,7 +894,7 @@
   }
   function syncSectionNavs() { sectionNavs.forEach((n) => n.syncVisibility()); }
 
-  /* ---------------- view menu (대시보드 / 한국 개최 / 달력 / 목록) ---------------- */
+  /* ---------------- view menu (대시보드 / 한국 개최 / 달력 / 목록 / 이메일 발송관리) ---------------- */
   function initViews() {
     const tabs = document.querySelectorAll(".view-tabs [data-view]");
     const views = {
@@ -902,11 +902,14 @@
       korea: $("#view-korea"),
       calendar: $("#view-calendar"),
       list: $("#view-list"),
+      email: $("#view-email"),
     };
     function show(name) {
       if (!views[name]) name = "dashboard";
-      Object.entries(views).forEach(([k, v]) => { v.hidden = k !== name; });
+      Object.entries(views).forEach(([k, v]) => { if (v) v.hidden = k !== name; });
       tabs.forEach((b) => b.classList.toggle("active", b.dataset.view === name));
+      // 📧 이메일 발송관리: load data/email.json only when the view is first opened
+      if (name === "email" && window.KIISE_EMAIL_ADMIN) window.KIISE_EMAIL_ADMIN.activate();
     }
     // open whatever the URL points at: a sub-menu page (major.html), a main menu
     // page (korea.html), or a legacy #section / #view hash, which is rewritten to

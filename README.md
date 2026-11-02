@@ -53,6 +53,10 @@ S/A 등급 구성, 대분야(AI·CS)·소분야(16개)별 분포를 시각화하
   회색 "기타" 등급으로 표시. 요약 타일·등급 구성·대분야/소분야 차트, 목록(등급 필터 **기타**, 공식 사이트 🔗 링크),
   **달력**(논문 제출 마감 캘린더 · 다가오는 마감, 회색 점선 칩 + S/A/기타 분류 필터)에 반영.
   *이전 대비 변동*과 대시보드 *월별 학회 현황*은 KIISE 지정(S/A) 학회만 집계
+- **📧 다가오는 마감 이메일 알림** — GitHub Actions가 매주 월요일 07:00(KST)에
+  ⏳ 다가오는 마감(D-7 이내) 정보를 이메일로 발송. 발송 요일·시각, 수신자, 수신자별
+  D-day는 웹페이지 **📧 이메일 발송관리** 메뉴에서 편집하고 GitHub Token으로 바로 커밋
+  (아래 *이메일 알림* 참고)
 - **라이트/다크 테마**, 반응형(모바일) 지원, 외부 라이브러리 의존성 없음
 
 ## 📊 데이터 개요 (연도별)
@@ -77,17 +81,21 @@ S/A 등급 구성, 대분야(AI·CS)·소분야(16개)별 분포를 시각화하
 .
 ├── data/
 │   ├── excellent_sw_conferences_2024.csv   # 원본 데이터 (KIISE)
-│   └── misc_sw_conferences_2024.csv        # 기타(참고용) — KIISE 비지정 해외 학회
+│   ├── misc_sw_conferences_2024.csv        # 기타(참고용) — KIISE 비지정 해외 학회
+│   ├── email.json                          # 마감 알림 메일 설정 (일정·수신자·D-day)
+│   └── email_state.json                    # 마지막 발송 회차 (Actions 가 자동 기록)
 ├── scripts/
-│   └── build_data.py                        # CSV → docs/assets/data.js 생성기
+│   ├── build_data.py                        # CSV → docs/assets/data.js 생성기
+│   └── send_upcoming_email.py               # 다가오는 마감 이메일 발송
 ├── docs/                                     # GitHub Pages 배포 폴더
 │   ├── index.html                            # 대시보드 페이지
-│   ├── dashboard.html · korea.html · …       # 메뉴별 페이지 16개 (index.html 에서 자동 생성)
+│   ├── dashboard.html · korea.html · …       # 메뉴별 페이지 20개 (index.html 에서 자동 생성)
 │   ├── data/
 │   │   └── excellent_sw_conferences_2024.csv # 원본 사본(참고용)
 │   └── assets/
 │       ├── style.css                         # 스타일 (라이트/다크)
 │       ├── app.js                            # 차트·표·필터 로직 (vanilla JS)
+│       ├── email-admin.js                    # 📧 이메일 발송관리 (email.json 편집·커밋)
 │       └── data.js                           # 자동 생성 (window.KIISE_DATA)
 └── README.md
 ```
@@ -169,6 +177,7 @@ python3 scripts/build_data.py
 | 🌏 개최지별(한국/일본) | `korea.html` | 🇰🇷 한국 개최 학회 현황 `hosted-korea.html` · 🇯🇵 일본 개최 학회 현황 `hosted-japan.html` |
 | 📅 달력 | `calendar.html` | 📅 논문 제출 마감 캘린더 `deadlines.html` · ⏳ 다가오는 마감 `upcoming.html` |
 | 📋 목록 | `list.html` | 📋 학회 목록 `conferences.html` · 🗑️ 제외(삭제)된 학회 `removed.html` |
+| 📧 이메일 발송관리 | `email.html` | ⏰ 발송 일정 · D-day `email-schedule.html` · 👥 수신자 관리 `email-recipients.html` · ⚙️ GitHub Token 관리 `email-github.html` |
 
 이 페이지들은 `docs/index.html` 에서 자동 생성되므로 직접 수정하지 말고,
 `index.html` 을 고친 뒤 아래 스크립트를 실행하세요. (기존 `#korea`, `#major-card` 형식 링크도 새 주소로 자동 전환됩니다.)
@@ -176,6 +185,55 @@ python3 scripts/build_data.py
 ```bash
 python3 scripts/build_section_pages.py
 ```
+
+## 📧 다가오는 마감 이메일 알림
+
+[⏳ 다가오는 마감](https://aigovsensing.github.io/conference_kiise/upcoming.html) 정보를
+GitHub Actions(`.github/workflows/upcoming-deadline-email.yml`)가 Gmail SMTP로 발송합니다
+(발송 방식은 [leemgs/stock-alert](https://github.com/leemgs/stock-alert) 와 동일).
+기본 설정은 **매주 월요일 07:00 KST, D-7 이내 마감**입니다.
+
+1. **Secret 등록** — 저장소 *Settings → Secrets and variables → Actions* 에
+   `GMAIL_APP_PASSWORD` (Gmail [앱 비밀번호](https://myaccount.google.com/apppasswords)) 추가
+2. **설정** — `data/email.json` (stock-alert 의 `data/email.json` 형식 + 일정/D-day 확장)
+
+   ```json
+   {
+     "enabled": true,
+     "smtp_host": "smtp.gmail.com", "smtp_port": 587,
+     "smtp_user": "you@gmail.com", "sender": "you@gmail.com",
+     "schedule": { "timezone": "Asia/Seoul", "days": ["MON"], "time": "07:00" },
+     "dday": 7,
+     "categories": ["S", "A", "M"],
+     "send_if_empty": true,
+     "page_url": "https://aigovsensing.github.io/conference_kiise/upcoming.html",
+     "receivers": [
+       "plain@example.com",
+       { "email": "a@example.com", "name": "홍길동", "dday": 14, "enabled": true }
+     ]
+   }
+   ```
+
+   - `dday` — 오늘(D-Day)부터 D-N일 이내 마감을 메일에 포함. 수신자별 `dday` 가 있으면 우선
+   - 수신자마다 메일을 따로 보내므로 서로의 주소가 노출되지 않습니다
+3. **웹에서 관리** — 상단 메뉴 **📧 이메일 발송관리**(`email.html`)에서 발송 요일·시각,
+   기본 D-day, 수신자(추가·삭제·개별 D-day·수신 on/off)를 편집하고, *⚙️ GitHub Token 관리*의
+   Personal Access Token으로 `data/email.json` 에 바로 커밋합니다. 토큰은
+   [Fine-grained](https://github.com/settings/personal-access-tokens/new) 로 이 저장소만 선택하고
+   **Contents: Read and write** 를 부여하세요(🧪 *지금 테스트 발송* 버튼까지 쓰려면 **Actions: Read and write** 추가).
+   토큰은 서버로 보내지 않고 GitHub API 호출에만 쓰이며, “기억하기”를 켠 경우에만 이 브라우저에 저장됩니다.
+
+일정을 워크플로 파일에 고정하지 않도록 워크플로는 **매시 5분**에 실행되고,
+스크립트가 `email.json` 의 일정 시각이 지났고(최대 6시간 이내) 아직 보내지 않은 회차일 때만
+발송한 뒤 `data/email_state.json` 에 기록합니다. 발송 실패 시 이슈가 자동 등록되며,
+Actions 탭에서 *Run workflow* 로 수동 실행하면 일정과 관계없이 즉시 발송합니다.
+
+```bash
+# 로컬 미리보기 (메일을 보내지 않음)
+python3 scripts/send_upcoming_email.py --force --dry-run --preview /tmp/mail.html
+```
+
+> ⚠️ `data/email.json` 은 저장소에 커밋되므로 공개 저장소에서는 수신자 주소가 공개됩니다.
 
 ## 🌐 GitHub Pages 배포
 
