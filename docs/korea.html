@@ -10,7 +10,7 @@
   <title>개최지별(한국/일본) · KIISE 우수 SW 국제학술대회 대시보드</title>
   <link rel="canonical" href="https://leemgs.github.io/conference_kiise/korea.html">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🎓%3C/text%3E%3C/svg%3E">
-  <link rel="stylesheet" href="assets/style.css?v=20261021">
+  <link rel="stylesheet" href="assets/style.css?v=20261102">
 </head>
 <body>
   <header class="site-header">
@@ -39,6 +39,7 @@
       <a href="korea.html" data-view="korea" class="active">🌏 개최지별(한국/일본)</a>
       <a href="calendar.html" data-view="calendar">📅 달력</a>
       <a href="list.html" data-view="list">📋 목록</a>
+      <a href="email.html" data-view="email">📧 이메일 발송관리</a>
     </nav>
 
     <div id="view-dashboard" hidden>
@@ -269,6 +270,147 @@
       </div>
     </details>
     </div><!-- /view-list -->
+
+    <div id="view-email" hidden>
+    <!-- Quick-jump sub-navigation: jump straight to an email-admin section -->
+    <nav class="section-nav" aria-label="이메일 발송관리 섹션 바로가기">
+      <a class="active" href="email-schedule.html" data-target="email-schedule-card">⏰ 발송 일정 · D-day</a>
+      <a href="email-recipients.html" data-target="email-recipients-card">👥 수신자 관리</a>
+      <a href="email-github.html" data-target="email-github-card">⚙️ GitHub Token 관리</a>
+    </nav>
+
+    <!-- Load/save status bar: the settings live in data/email.json of the repo -->
+    <div class="em-status" id="em-status" role="status" aria-live="polite">
+      <div class="em-status-text">
+        <b id="em-status-title">설정 불러오는 중…</b>
+        <span id="em-status-sub" class="muted"></span>
+      </div>
+      <div class="em-status-actions">
+        <button id="em-reload" class="btn ghost" type="button" title="GitHub 저장소의 data/email.json 다시 불러오기">🔄 불러오기</button>
+        <button id="em-save" class="btn primary" type="button">💾 GitHub에 커밋</button>
+      </div>
+    </div>
+
+    <!-- Schedule & D-day -->
+    <section class="card" id="email-schedule-card">
+      <div class="card-head">
+        <h2>⏰ 발송 일정 · D-day</h2>
+        <p class="card-sub">GitHub Actions가 <code>data/email.json</code>의 일정에 맞춰 <a href="upcoming.html">⏳ 다가오는 마감</a> 정보를 이메일로 발송합니다 (기본: 매주 월요일 07:00 KST).</p>
+      </div>
+      <div class="em-form">
+        <div class="em-row">
+          <span class="em-label">자동 발송</span>
+          <label class="em-switch"><input type="checkbox" id="em-enabled"> <span>사용</span></label>
+        </div>
+        <div class="em-row">
+          <span class="em-label">발송 요일</span>
+          <div class="filter-group" id="em-days" role="group" aria-label="발송 요일"></div>
+        </div>
+        <div class="em-row">
+          <label class="em-label" for="em-time">발송 시각</label>
+          <div class="em-inline">
+            <input type="time" id="em-time" step="300" value="07:00">
+            <span class="muted">KST (Asia/Seoul)</span>
+          </div>
+        </div>
+        <p class="em-hint">GitHub Actions가 매시 5분에 일정을 점검하므로, 실제 발송은 지정 시각 이후 첫 점검 때 이뤄집니다 (예: 07:00 → 약 07:05, 혼잡 시 다소 지연).</p>
+        <div class="em-row">
+          <label class="em-label" for="em-dday">기본 D-day</label>
+          <div class="em-inline">
+            <span class="em-dprefix">D-</span><input type="number" id="em-dday" min="0" max="365" value="7">
+            <div class="filter-group" id="em-dday-quick" role="group" aria-label="D-day 빠른 선택"></div>
+          </div>
+        </div>
+        <p class="em-hint">오늘(D-Day)부터 <b>D-N일</b> 이내의 초록·논문 마감을 메일에 담습니다. 수신자별로 다른 D-day를 지정할 수도 있습니다.</p>
+        <div class="em-row">
+          <span class="em-label">학회 분류</span>
+          <div class="em-inline" id="em-cats">
+            <label><input type="checkbox" value="S"> 최우수(S)</label>
+            <label><input type="checkbox" value="A"> 우수(A)</label>
+            <label><input type="checkbox" value="M"> 기타(참고용)</label>
+          </div>
+        </div>
+        <div class="em-row">
+          <span class="em-label">마감 없을 때</span>
+          <label class="em-switch"><input type="checkbox" id="em-send-empty"> <span>"예정된 마감 없음" 메일도 발송</span></label>
+        </div>
+        <details class="em-advanced">
+          <summary>발신 계정(SMTP) · 링크 설정</summary>
+          <div class="em-grid">
+            <label>SMTP 호스트<input id="em-smtp-host" placeholder="smtp.gmail.com"></label>
+            <label>SMTP 포트<input id="em-smtp-port" type="number" placeholder="587"></label>
+            <label>SMTP 사용자<input id="em-smtp-user" placeholder="you@gmail.com"></label>
+            <label>발신 주소<input id="em-sender" placeholder="you@gmail.com"></label>
+            <label>발신자 이름<input id="em-sender-name" placeholder="KIISE 학회 마감 알림"></label>
+            <label>메일 속 바로가기 링크<input id="em-page-url" placeholder="https://…/upcoming.html"></label>
+          </div>
+          <p class="em-hint">SMTP 비밀번호는 이 파일에 저장하지 않습니다. 저장소 <b>Settings → Secrets and variables → Actions</b>에 <code>GMAIL_APP_PASSWORD</code>(Gmail 앱 비밀번호)를 등록하세요.</p>
+        </details>
+      </div>
+      <div class="em-preview">
+        <h3 id="em-next">다음 발송 예정</h3>
+        <p id="em-preview-sub" class="card-sub"></p>
+        <ol id="em-preview-list" class="em-preview-list"></ol>
+      </div>
+    </section>
+
+    <!-- Recipients -->
+    <section class="card" id="email-recipients-card">
+      <div class="card-head">
+        <h2>👥 수신자 관리</h2>
+        <p class="card-sub">수신자마다 메일이 따로 발송되어 서로의 주소가 노출되지 않습니다. D-day를 비워 두면 기본 D-day를 사용합니다.</p>
+      </div>
+      <form class="em-add" id="em-add" autocomplete="off">
+        <input type="email" id="em-add-email" placeholder="이메일 주소 (예: name@example.com)" required>
+        <input id="em-add-name" placeholder="이름 (선택)">
+        <span class="em-inline"><span class="em-dprefix">D-</span><input type="number" id="em-add-dday" min="0" max="365" placeholder="기본"></span>
+        <button class="btn primary" type="submit">➕ 수신자 추가</button>
+      </form>
+      <div class="table-scroll">
+        <table class="em-table">
+          <thead><tr><th>#</th><th>이메일</th><th>이름</th><th>D-day</th><th>현재 대상</th><th>수신</th><th>관리</th></tr></thead>
+          <tbody id="em-rcpt-body"></tbody>
+        </table>
+        <p id="em-rcpt-empty" class="empty" hidden>등록된 수신자가 없습니다.</p>
+      </div>
+      <p class="em-hint">⚠️ <code>data/email.json</code>은 저장소에 커밋되므로 공개 저장소에서는 수신자 주소가 공개됩니다. 회사 이메일은 방화벽·스팸함으로 수신이 막히는 경우가 많습니다.</p>
+    </section>
+
+    <!-- GitHub token -->
+    <section class="card" id="email-github-card">
+      <div class="card-head">
+        <h2>⚙️ GitHub Token 관리</h2>
+        <p class="card-sub">GitHub Pages는 서버가 없는 정적 사이트이므로, 변경한 설정은 Personal Access Token으로 저장소에 직접 커밋해야 반영됩니다. 커밋 전까지는 이 브라우저에만 임시 저장됩니다.</p>
+      </div>
+      <details class="em-gh" id="em-gh" open>
+        <summary>⚙️ GitHub에 직접 커밋 (Personal Access Token 필요)</summary>
+        <div class="em-grid">
+          <label>Owner<input id="gh-owner" placeholder="leemgs"></label>
+          <label>Repo<input id="gh-repo" placeholder="conference_kiise"></label>
+          <label>Branch<input id="gh-branch" placeholder="main"></label>
+          <label>파일 경로<input id="gh-path" placeholder="data/email.json"></label>
+          <label class="full">Personal Access Token (contents:write · 이 브라우저에만 저장)<input id="gh-token" type="password" placeholder="github_pat_… 또는 ghp_…" autocomplete="off"></label>
+        </div>
+        <div class="em-gh-actions">
+          <label class="em-switch"><input type="checkbox" id="gh-remember"> <span>GitHub에 커밋 토큰 기억하기</span></label>
+          <span class="em-spacer"></span>
+          <button class="btn ghost" type="button" id="gh-forget">🗑️ 저장된 토큰 삭제</button>
+          <button class="btn ghost" type="button" id="gh-test">🧪 지금 테스트 발송</button>
+          <button class="btn primary" type="button" id="gh-commit">GitHub에 커밋</button>
+        </div>
+        <div class="em-note warn">⚠️ 토큰은 이 저장소를 쓸 수 있는 권한입니다. 공용 PC에서는 “기억하기”를 끄고, 사용 후 <a href="https://github.com/settings/tokens" target="_blank" rel="noopener">토큰 폐기</a>를 권장합니다.</div>
+        <div class="em-note">🔑 <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Fine-grained 토큰 만들기 ↗</a> — Repository access에서 이 저장소만 선택하고, Permissions → <b>Contents: Read and write</b>를 부여하세요. “🧪 지금 테스트 발송”까지 쓰려면 <b>Actions: Read and write</b>도 필요합니다 (Classic 토큰은 <code>repo</code> + <code>workflow</code>).</div>
+      </details>
+      <details class="em-json">
+        <summary>📄 data/email.json 미리보기 · 수동 반영</summary>
+        <pre id="em-json-pre" class="em-json-pre"></pre>
+        <div class="em-gh-actions">
+          <button class="btn ghost" type="button" id="em-copy">📋 JSON 복사</button>
+          <button class="btn ghost" type="button" id="em-download">⬇️ email.json 다운로드</button>
+        </div>
+      </details>
+    </section>
+    </div><!-- /view-email -->
   </main>
 
   <footer class="site-footer">
@@ -278,6 +420,7 @@
     </div>
   </footer>
 
+  <div id="em-toast" class="em-toast" role="status" aria-live="polite" hidden></div>
   <div id="tooltip" class="tooltip" role="status" aria-live="polite" hidden></div>
 
   <!-- 학회명 클릭 시 열리는 구글 검색 사이드 패널 -->
@@ -303,11 +446,12 @@
   </aside>
 
   <script src="assets/data.js?v=20261021"></script>
-  <script src="assets/i18n.js?v=20261026"></script>
+  <script src="assets/i18n.js?v=20261102"></script>
   <script src="assets/deadlines.js?v=20261101"></script>
   <script src="assets/korea.js?v=20260727"></script>
   <script src="assets/publications.js?v=20260821"></script>
   <script src="assets/publication-chart.js?v=20260821b"></script>
-  <script src="assets/app.js?v=20261026b"></script>
+  <script src="assets/email-admin.js?v=20261102"></script>
+  <script src="assets/app.js?v=20261102"></script>
 </body>
 </html>

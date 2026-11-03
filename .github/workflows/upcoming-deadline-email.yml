@@ -1,0 +1,65 @@
+name: Upcoming deadline email
+
+# "⏳ 다가오는 마감"(upcoming.html) 정보를 이메일로 발송한다.
+#
+# 발송 요일·시각·수신자·D-day 는 data/email.json 에 있고, 웹페이지의
+# "📧 이메일 발송관리" 메뉴에서 편집해 커밋할 수 있다. 일정을 워크플로 파일에
+# 고정하지 않기 위해 매시간 점검하고, 스크립트가 email.json 의 일정
+# (기본: 매주 월요일 07:00 KST) 이 지났고 아직 보내지 않은 회차일 때만 실제로
+# 발송한다. 발송한 회차는 data/email_state.json 에 기록·커밋된다.
+#
+# 필요한 Secret: GMAIL_APP_PASSWORD (Gmail 앱 비밀번호 — leemgs/stock-alert 와 동일)
+# 수동 실행(Run workflow) 시에는 일정과 무관하게 바로 발송한다(테스트 발송).
+on:
+  schedule:
+    - cron: "5 * * * *" # 매시 5분(UTC) 점검 — 월요일 07:00 KST 회차는 07:05 KST 실행에서 발송
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "메일을 보내지 않고 내용만 로그로 확인"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: upcoming-deadline-email
+  cancel-in-progress: false
+
+jobs:
+  email:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Send upcoming-deadline email (if due)
+        env:
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD || vars.GMAIL_APP_PASSWORD }}
+          GITHUB_TOKEN: ${{ github.token }}
+          TZ: Asia/Seoul
+        run: |
+          ARGS=""
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            ARGS="--force"
+            if [ "${{ inputs.dry_run }}" = "true" ]; then ARGS="$ARGS --dry-run"; fi
+          fi
+          python3 scripts/send_upcoming_email.py $ARGS
+
+      - name: Record sent slot
+        if: always()
+        run: |
+          if [ -z "$(git status --porcelain -- data/email_state.json)" ]; then
+            echo "No state change."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/email_state.json
+          git commit -m "chore: record upcoming-deadline email delivery"
+          for i in 1 2 3 4; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push && exit 0
+            sleep $((i * 5))
+          done
+          exit 1
