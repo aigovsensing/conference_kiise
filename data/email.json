@@ -24,8 +24,14 @@
   "receivers": [
     {
       "email": "leemgs@gmail.com",
-      "name": "",
+      "name": "임근식",
       "dday": null,
+      "enabled": true
+    },
+    {
+      "email": "geunsik.lim@gmail.com",
+      "name": "임근식",
+      "dday": 7,
       "enabled": true
     }
   ]
