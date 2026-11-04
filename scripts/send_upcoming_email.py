@@ -197,8 +197,8 @@ def search_url(it: dict) -> str:
 def subject_for(items: list, today: dt.date, dday: int) -> str:
     day = f"{today.isoformat()}({DOW_KO[today.weekday()]})"
     if not items:
-        return f"[KIISE 학회 마감 알림] D-{dday} 이내 예정된 마감 없음 · {day}"
-    return f"[KIISE 학회 마감 알림] D-{dday} 이내 다가오는 마감 {len(items)}건 · {day}"
+        return f"[KIISE 선정 학회 마감 알림] D-{dday} 이내 예정된 마감 없음 · {day}"
+    return f"[KIISE 선정 학회 마감 알림] D-{dday} 이내 다가오는 마감 {len(items)}건 · {day}"
 
 
 def html_body(items: list, today: dt.date, dday: int, cfg: dict, name: str = "") -> str:
