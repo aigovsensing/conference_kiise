@@ -26,13 +26,13 @@
       "email": "leemgs@gmail.com",
       "name": "임근식",
       "dday": null,
-      "enabled": false
+      "enabled": true
     },
     {
       "email": "geunsik.lim@gmail.com",
       "name": "임근식",
       "dday": 7,
-      "enabled": false
+      "enabled": true
     }
   ]
 }
