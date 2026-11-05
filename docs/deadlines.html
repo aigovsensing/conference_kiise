@@ -395,11 +395,12 @@
           <label class="em-switch"><input type="checkbox" id="gh-remember"> <span>GitHub에 커밋 토큰 기억하기</span></label>
           <span class="em-spacer"></span>
           <button class="btn ghost" type="button" id="gh-forget">🗑️ 저장된 토큰 삭제</button>
-          <button class="btn ghost" type="button" id="gh-test">🧪 지금 테스트 발송</button>
+          <button class="btn ghost" type="button" id="gh-test" title="입력한 토큰으로 GitHub 로그인·저장소 쓰기 권한을 확인합니다">🧪 지금 로그인 테스트</button>
           <button class="btn primary" type="button" id="gh-commit">GitHub에 커밋</button>
         </div>
+        <div id="gh-test-result" class="em-note" role="status" aria-live="polite" hidden></div>
         <div class="em-note warn">⚠️ 토큰은 이 저장소를 쓸 수 있는 권한입니다. 공용 PC에서는 “기억하기”를 끄고, 사용 후 <a href="https://github.com/settings/tokens" target="_blank" rel="noopener">토큰 폐기</a>를 권장합니다.</div>
-        <div class="em-note">🔑 <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Fine-grained 토큰 만들기 ↗</a> — Repository access에서 이 저장소만 선택하고, Permissions → <b>Contents: Read and write</b>를 부여하세요. “🧪 지금 테스트 발송”까지 쓰려면 <b>Actions: Read and write</b>도 필요합니다 (Classic 토큰은 <code>repo</code> + <code>workflow</code>).</div>
+        <div class="em-note">🔑 <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Fine-grained 토큰 만들기 ↗</a> — Repository access에서 이 저장소만 선택하고, Permissions → <b>Contents: Read and write</b>를 부여하세요. 입력한 토큰이 유효한지는 “🧪 지금 로그인 테스트”로 확인할 수 있습니다 (Classic 토큰은 <code>repo</code> 권한).</div>
       </details>
       <details class="em-json">
         <summary>📄 data/email.json 미리보기 · 수동 반영</summary>
