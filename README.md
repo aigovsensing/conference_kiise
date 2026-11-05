@@ -220,7 +220,7 @@ GitHub Actions(`.github/workflows/upcoming-deadline-email.yml`)가 Gmail SMTP로
    기본 D-day, 수신자(추가·삭제·개별 D-day·수신 on/off)를 편집하고, *⚙️ GitHub Token 관리*의
    Personal Access Token으로 `data/email.json` 에 바로 커밋합니다. 토큰은
    [Fine-grained](https://github.com/settings/personal-access-tokens/new) 로 이 저장소만 선택하고
-   **Contents: Read and write** 를 부여하세요(🧪 *지금 테스트 발송* 버튼까지 쓰려면 **Actions: Read and write** 추가).
+   **Contents: Read and write** 를 부여하세요(🧪 *지금 로그인 테스트* 버튼으로 토큰 로그인·저장소 쓰기 권한을 바로 확인할 수 있습니다).
    토큰은 서버로 보내지 않고 GitHub API 호출에만 쓰이며, “기억하기”를 켠 경우에만 이 브라우저에 저장됩니다.
 
 일정을 워크플로 파일에 고정하지 않도록 워크플로는 **매시 5분**에 실행되고,

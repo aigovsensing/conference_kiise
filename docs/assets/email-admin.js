@@ -15,7 +15,6 @@
 
   const LS_GH = "kiise-email-gh";        // {owner, repo, branch, path, token?}
   const LS_DRAFT = "kiise-email-draft";  // {cfg, baseline, source}
-  const WORKFLOW = "upcoming-deadline-email.yml";
   const DAYS = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
   const DAY_KO = { MON: "월", TUE: "화", WED: "수", THU: "목", FRI: "금", SAT: "토", SUN: "일" };
   const DOW_KO = ["일", "월", "화", "수", "목", "금", "토"];      // Date#getUTCDay order
@@ -525,29 +524,80 @@
       btns.forEach((b) => { b.disabled = false; b.textContent = b.dataset.label; });
     }
   }
-  async function testSend() {
+  /** 🧪 지금 로그인 테스트 — verifies the token (login, repo access, write permission, file/branch). */
+  async function testLogin() {
     const g = gh();
-    if (needToken(g)) return;
-    if (isDirty() && !confirm("커밋되지 않은 변경사항은 테스트 발송에 반영되지 않습니다 (저장소의 email.json 기준으로 발송).\n계속할까요?")) return;
-    if (!confirm(`${g.owner}/${g.repo} 의 "${WORKFLOW}" 워크플로를 실행해 지금 바로 모든 수신자에게 메일을 발송합니다.\n계속할까요?`)) return;
+    if (!g.token) { needToken(g); return; }
+    if (!g.owner || !g.repo) { needToken(g); return; }
     saveGh();
-    const b = $("#gh-test");
-    b.disabled = true;
+    const btn = $("#gh-test"), box = $("#gh-test-result");
+    const label = btn.textContent;
+    btn.disabled = true; btn.textContent = "확인 중…";
+    const lines = [];
+    let ok = true;
+    const show = () => {
+      box.hidden = false;
+      box.className = "em-note " + (ok ? "ok" : "warn");
+      box.innerHTML = lines.map((l) => `<div>${l}</div>`).join("");
+    };
+    const call = async (url) => {
+      const r = await fetch(url, { headers: headers(g), cache: "no-store" });
+      const body = await r.json().catch(() => ({}));
+      return { r, body };
+    };
+    const base = `https://api.github.com/repos/${encodeURIComponent(g.owner)}/${encodeURIComponent(g.repo)}`;
     try {
-      const res = await fetch(`https://api.github.com/repos/${encodeURIComponent(g.owner)}/` +
-        `${encodeURIComponent(g.repo)}/actions/workflows/${WORKFLOW}/dispatches`, {
-        method: "POST", headers: headers(g), body: JSON.stringify({ ref: g.branch }),
-      });
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error((err.message || `HTTP ${res.status}`) +
-          (res.status === 403 || res.status === 404 ? " (토큰 권한 Actions: Read and write 확인)" : ""));
+      // 1) token → GitHub account
+      const me = await call("https://api.github.com/user");
+      if (me.r.status === 401) {
+        ok = false;
+        lines.push("❌ <b>로그인 실패</b> — 토큰이 잘못되었거나 만료/폐기되었습니다 (Bad credentials).");
+        return;
       }
-      toast("🧪 발송 워크플로를 실행했습니다 — 1~2분 후 메일함을 확인하세요.", 6000);
+      if (!me.r.ok) {
+        ok = false;
+        lines.push(`❌ <b>로그인 실패</b> — ${esc(me.body.message || "HTTP " + me.r.status)}`);
+        return;
+      }
+      lines.push(`✅ <b>로그인 성공</b> — <b>@${esc(me.body.login)}</b>` +
+        (me.body.name ? ` (${esc(me.body.name)})` : "") + " 계정으로 인증되었습니다.");
+      const exp = me.r.headers.get("github-authentication-token-expiration");
+      if (exp) lines.push(`⏳ 토큰 만료: ${esc(exp)}`);
+
+      // 2) repository access + write permission
+      const repo = await call(base);
+      if (repo.r.status === 404) {
+        ok = false;
+        lines.push(`❌ 저장소 <b>${esc(g.owner)}/${esc(g.repo)}</b>에 접근할 수 없습니다 — Owner/Repo 철자 또는 토큰의 Repository access 범위를 확인하세요.`);
+      } else if (!repo.r.ok) {
+        ok = false;
+        lines.push(`❌ 저장소 확인 실패 — ${esc(repo.body.message || "HTTP " + repo.r.status)}`);
+      } else {
+        const perm = repo.body.permissions || {};
+        if (perm.push || perm.admin || perm.maintain) {
+          lines.push(`✅ 저장소 <b>${esc(repo.body.full_name)}</b> 쓰기 권한 확인`);
+        } else {
+          ok = false;
+          lines.push(`❌ 저장소 <b>${esc(repo.body.full_name)}</b>는 읽기만 가능합니다 — <b>Contents: Read and write</b> 권한이 필요합니다.`);
+        }
+        // 3) branch + file
+        const f = await call(`${apiUrl(g)}?ref=${encodeURIComponent(g.branch)}`);
+        if (f.r.ok) {
+          lines.push(`✅ <code>${esc(g.branch)}</code> 브랜치의 <code>${esc(g.path)}</code> 읽기 성공`);
+        } else if (f.r.status === 404) {
+          lines.push(`ℹ️ <code>${esc(g.branch)}</code> 브랜치에 <code>${esc(g.path)}</code> 파일이 아직 없습니다 (첫 커밋 때 새로 만들어집니다). 브랜치 이름이 맞는지 확인하세요.`);
+        } else {
+          ok = false;
+          lines.push(`❌ 파일 읽기 실패 — ${esc(f.body.message || "HTTP " + f.r.status)}`);
+        }
+      }
+      toast(ok ? "✓ 로그인 테스트 통과" : "로그인은 되었지만 권한에 문제가 있습니다.", 4000);
     } catch (err) {
-      toast("실행 실패: " + err.message, 7000);
+      ok = false;
+      lines.push(`❌ 네트워크 오류 — ${esc(err.message)}`);
     } finally {
-      b.disabled = false;
+      show();
+      btn.disabled = false; btn.textContent = label;
     }
   }
 
@@ -566,7 +616,7 @@
     initJson();
     $("#em-save").onclick = commit;
     $("#gh-commit").onclick = commit;
-    $("#gh-test").onclick = testSend;
+    $("#gh-test").onclick = testLogin;
     $("#em-reload").onclick = () => {
       if (isDirty() && !confirm("커밋되지 않은 변경사항을 버리고 저장소에서 다시 불러올까요?")) return;
       load(true);

@@ -715,3 +715,6 @@ body.panel-open { overflow: hidden; }
 .em-table td:nth-child(3) { min-width: 120px; }
 .em-table td .em-inline { flex-wrap: nowrap; }
 .em-table td input[type="number"] { min-width: 64px; }
+
+.em-note.ok { border-left-color: var(--ai); }
+.em-note div + div { margin-top: 4px; }
