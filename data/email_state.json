@@ -1,7 +1,8 @@
 {
-  "last_run": "2026-11-04T10:08:42+09:00",
-  "last_mode": "force",
+  "last_run": "2026-11-09T08:36:51+09:00",
+  "last_mode": "schedule",
   "last_sent": 2,
   "last_failed": 0,
-  "last_error": null
+  "last_error": null,
+  "last_slot": "2026-11-09T07:00:00+09:00"
 }
