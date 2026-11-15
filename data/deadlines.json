@@ -1,48 +1,6 @@
 {
-  "updated": "2026-11-08",
+  "updated": "2026-11-15",
   "items": [
-    {
-      "abbr": "ASPLOS",
-      "edition": "2027",
-      "kind": "논문",
-      "date": "2026-09-09",
-      "note": "가을 라운드",
-      "status": "confirmed"
-    },
-    {
-      "abbr": "CHI",
-      "edition": "2027",
-      "kind": "논문",
-      "date": "2026-09-10",
-      "status": "confirmed"
-    },
-    {
-      "abbr": "USENIX NSDI",
-      "edition": "2027",
-      "kind": "초록",
-      "date": "2026-09-10",
-      "status": "confirmed"
-    },
-    {
-      "abbr": "FSE",
-      "edition": "2027",
-      "kind": "논문",
-      "date": "2026-09-11"
-    },
-    {
-      "abbr": "ICRA",
-      "edition": "2027",
-      "kind": "논문",
-      "date": "2026-09-15",
-      "status": "confirmed"
-    },
-    {
-      "abbr": "USENIX FAST",
-      "edition": "2027",
-      "kind": "논문",
-      "date": "2026-09-15",
-      "status": "confirmed"
-    },
     {
       "abbr": "ICASSP",
       "edition": "2027",
