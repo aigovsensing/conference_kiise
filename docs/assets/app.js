@@ -32,6 +32,19 @@
   // 마감일 항목의 확정 여부: status 가 "confirmed" 일 때만 확정, 그 외(미지정 포함)는 예상치
   const isConfirmed = (it) => it.status === "confirmed";
 
+  // 마감 시각(절대 시각) 계산. 항목에 time("HH:MM")·tz 가 없으면 학회 CFP 관례인
+  // AoE(UTC-12) 23:59 로 간주한다. 화면에는 항상 KST(UTC+9)로 환산해 표시한다.
+  const TZ_OFFSET = { AoE: -12, UTC: 0, GMT: 0, KST: 9, JST: 9, CET: 1, CEST: 2,
+                      EST: -5, EDT: -4, CST: -6, CDT: -5, MST: -7, MDT: -6, PST: -8, PDT: -7 };
+  function deadlineInstant(it) {
+    const [y, m, d] = it.date.split("-").map(Number);
+    const [hh, mm] = (it.time || "23:59").split(":").map(Number);
+    const off = TZ_OFFSET[it.tz || "AoE"];
+    return Date.UTC(y, m - 1, d, hh, mm) - (off === undefined ? -12 : off) * 3600000;
+  }
+  // KST 벽시계 값 (UTC getter 로 읽는다)
+  const kstParts = (ms) => new Date(ms + 9 * 3600000);
+
   // conference identity for year-over-year diff: abbr sans parenthetical qualifier
   const confKey = (r) =>
     (r.abbr || r.name).replace(/\(.*?\)/g, "").toLowerCase().replace(/[^a-z0-9]/g, "");
@@ -619,10 +632,9 @@
     const upList = $("#upcoming-list");
     if (upList) {
       const LIMIT = 12;
-      const todayStr = fmt(new Date());
-      const allUpcoming = dl.items
-        .filter((it) => it.date >= todayStr)
-        .sort((a, b) => a.date.localeCompare(b.date) || a.abbr.localeCompare(b.abbr));
+      const allItems = dl.items
+        .map((it) => Object.assign({ _t: deadlineInstant(it) }, it))
+        .sort((a, b) => a._t - b._t || a.abbr.localeCompare(b.abbr));
       const moreBtn = $("#upcoming-more");
       let expanded = false;
 
@@ -635,11 +647,20 @@
 
       drawUpcoming = function () {
         upList.innerHTML = "";
-        const upcoming = allUpcoming.filter(visible);
-        const base = new Date(); base.setHours(0, 0, 0, 0);
+        const now = Date.now();
+        const upcoming = allItems.filter((it) => it._t >= now && visible(it));
         upcoming.slice(0, expanded ? upcoming.length : LIMIT).forEach((it) => {
-          const d = new Date(it.date + "T00:00:00");
-          const dday = Math.round((d - base) / 86400000);
+          const k = kstParts(it._t); // KST 기준 마감 일시
+          const left = it._t - now;
+          const days = Math.floor(left / 86400000);
+          const hours = Math.floor(left % 86400000 / 3600000);
+          const mins = Math.floor(left % 3600000 / 60000);
+          const dday = days;
+          const kstDate = `${k.getUTCFullYear()}.${pad(k.getUTCMonth() + 1)}.${pad(k.getUTCDate())}`;
+          const kstTime = `${pad(k.getUTCHours())}:${pad(k.getUTCMinutes())}`;
+          const srcTz = it.tz || "AoE";
+          const srcLine = srcTz === "KST" ? "" :
+            `<span class="up-src">${T.upOrig(it.date.replace(/-/g, "."), it.time || "23:59", srcTz, !it.time)}</span>`;
           const rec = recOf(it);
           const misc = it.cat === "misc";
           const li = el("li", "up-item" + (misc ? " misc" : ""));
@@ -647,7 +668,10 @@
           li.innerHTML =
             `<div class="up-dday${dday <= 7 ? " near" : ""}">` +
               `${dday === 0 ? "D-Day" : "D-" + dday}` +
-              `<span class="up-date">${it.date.replace(/-/g, ".")} (${T.dow[d.getDay()]})</span>` +
+              `<span class="up-left">${T.upLeft(days, hours, mins)}</span>` +
+              `<span class="up-date">${kstDate} (${T.dow[k.getUTCDay()]})</span>` +
+              `<span class="up-time">${kstTime} KST</span>` +
+              srcLine +
             `</div>` +
             `<div class="up-body">` +
               `<div class="up-title"><b>${it.abbr} ${it.edition}</b>` +
@@ -669,6 +693,7 @@
       };
       moreBtn.onclick = () => { expanded = !expanded; drawUpcoming(); };
       drawUpcoming();
+      setInterval(drawUpcoming, 60000); // 남은 시간을 1분마다 갱신
     }
   }
 
