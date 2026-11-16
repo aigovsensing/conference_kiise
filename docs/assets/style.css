@@ -556,11 +556,14 @@ tr.misc-row td { color: var(--text-2); }
 .up-item.misc { border-left: 5px dashed var(--grade-m); }
 .up-item.misc .up-title b { color: var(--text-2); }
 .up-dday {
-  flex: 0 0 96px; display: flex; flex-direction: column; gap: 2px; text-align: center;
+  flex: 0 0 112px; display: flex; flex-direction: column; gap: 2px; text-align: center;
   font-weight: 800; font-size: 1.06rem; color: var(--text);
 }
 .up-dday.near { color: #e05252; }
 .up-date { font-size: .73rem; font-weight: 600; color: var(--text-2); }
+.up-left { font-size: .72rem; font-weight: 700; color: var(--text-2); }
+.up-time { font-size: .9rem; font-weight: 800; color: var(--text); }
+.up-src { font-size: .62rem; font-weight: 500; color: var(--muted); }
 .up-body { min-width: 0; flex: 1; }
 .up-title { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: .95rem; }
 .up-badge {
